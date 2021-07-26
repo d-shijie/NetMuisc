@@ -11,12 +11,12 @@
         </el-aside>
         <el-main>
           <keep-alive exclude="Search,Singer,Album,MV,MusicList,Profile,Dj,DjCategory">
-            <router-view ref="main" :keywords="keywords">
+            <router-view :is-show-play="isShowPlay" @play="audioPlay" @pause="audioPause" ref="main" :keywords="keywords">
             </router-view></keep-alive>
         </el-main>
       </el-container>
     </el-container>
-    <div class="audio"><audio :src="musicUrl" class="audio" autoplay controls loop></audio></div>
+    <div class="audio"><audio @pause="pause" @play="play" @timeupdate="timeUpdate" ref="audio"  :src="musicUrl" class="audio" autoplay controls loop></audio></div>
   </div>
 </template>
 
@@ -30,7 +30,9 @@ export default {
     return {
       keywords:"",
       choices: ["发现音乐","视频","朋友","直播","私人FM"],
-      scroll:""
+      scroll:"",
+      is_play:false,
+      isShowPlay:true,
     }
   },
   computed:{
@@ -38,19 +40,30 @@ export default {
       return this.$store.state.musicUrl
     }
   },
-  mounted() {
-
-  },
   components: {
     NavBar,
     TabBar,
     Login
   },
   methods:{
-    getKeywords(keywords){
-     this.keywords=keywords
+    timeUpdate(time){
+      this.$bus.$emit("timeUpdate",this.$refs.audio.currentTime)
     },
-
+    audioPause(){
+      this.$refs.audio.pause()
+    },
+    audioPlay(){
+      this.$refs.audio.play()
+    },
+    getKeywords(keywords){
+      this.keywords=keywords
+    },
+    pause(){
+      this.isShowPlay=true
+    },
+    play(){
+      this.isShowPlay=false
+    }
   }
 }
 </script>

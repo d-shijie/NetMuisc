@@ -1,6 +1,6 @@
 <template>
    <div class="mvs">
-     <h2>mvs</h2>
+     <h2>登陆后获取</h2>
    </div>
 </template>
 

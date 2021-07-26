@@ -1,14 +1,14 @@
 <template>
   <div class="videos">
-    <h2>视频</h2>
+    <h2>登陆后获取</h2>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import {getVideoTags} from "../../network/getVideoData";
 import {getVideoCategory} from "../../network/getVideoData";
 import {getVideos} from "../../network/getVideoData";
-
 export default {
   name: "Videos",
   data(){
