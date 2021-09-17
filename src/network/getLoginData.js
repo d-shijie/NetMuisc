@@ -10,3 +10,8 @@ export function getPhoneLogin(phone,password){
 
     })
 }
+export function logout(){
+    return request({
+        url:'/logout'
+    })
+}

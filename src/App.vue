@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Login class="login"></Login>
+    <logout class="logout"></logout>
     <el-container>
       <el-header>
         <nav-bar @getKeywords="getKeywords"></nav-bar>
@@ -10,13 +11,34 @@
           <tab-bar :choices="choices"></tab-bar>
         </el-aside>
         <el-main>
-          <keep-alive exclude="Search,Singer,Album,MV,MusicList,Profile,Dj,DjCategory">
-            <router-view :is-show-play="isShowPlay" @play="audioPlay" @pause="audioPause" ref="main" :keywords="keywords">
-            </router-view></keep-alive>
+          <keep-alive
+            exclude="Search,Singer,Album,MV,MusicList,Profile,Dj,DjCategory,DailyReommend"
+          >
+            <router-view
+              :is-show-play="isShowPlay"
+              @play="audioPlay"
+              @pause="audioPause"
+              ref="main"
+              :keywords="keywords"
+            >
+            </router-view
+          ></keep-alive>
         </el-main>
       </el-container>
     </el-container>
-    <div class="audio"><audio @pause="pause" @play="play" @timeupdate="timeUpdate" ref="audio"  :src="musicUrl" class="audio" autoplay controls loop></audio></div>
+    <div class="audio">
+      <audio
+        @pause="pause"
+        @play="play"
+        @timeupdate="timeUpdate"
+        ref="audio"
+        :src="musicUrl"
+        class="audio"
+        autoplay
+        controls
+        loop
+      ></audio>
+    </div>
   </div>
 </template>
 
@@ -24,48 +46,53 @@
 import NavBar from "./views/navbar/NavBar";
 import TabBar from "./components/tabbar/TabBar";
 import Login from "./components/login/Login";
+import Logout from "./components/logout/Logout.vue";
 export default {
-  name: 'App',
-  data(){
+  name: "App",
+  data() {
     return {
-      keywords:"",
-      choices: ["发现音乐","视频","朋友","直播","私人FM"],
-      scroll:"",
-      is_play:false,
-      isShowPlay:true,
-    }
+      keywords: "",
+      choices: ["发现音乐", "视频", "朋友", "直播", "私人FM"],
+      scroll: "",
+      is_play: false,
+      isShowPlay: true,
+    };
   },
-  computed:{
-    musicUrl(){
-      return this.$store.state.musicUrl
-    }
+  computed: {
+    musicUrl() {
+      return this.$store.state.musicUrl;
+    },
+  },
+  created() {
+    window.sessionStorage.clear();
   },
   components: {
     NavBar,
     TabBar,
-    Login
+    Login,
+    Logout,
   },
-  methods:{
-    timeUpdate(time){
-      this.$bus.$emit("timeUpdate",this.$refs.audio.currentTime)
+  methods: {
+    timeUpdate(time) {
+      this.$bus.$emit("timeUpdate", this.$refs.audio.currentTime);
     },
-    audioPause(){
-      this.$refs.audio.pause()
+    audioPause() {
+      this.$refs.audio.pause();
     },
-    audioPlay(){
-      this.$refs.audio.play()
+    audioPlay() {
+      this.$refs.audio.play();
     },
-    getKeywords(keywords){
-      this.keywords=keywords
+    getKeywords(keywords) {
+      this.keywords = keywords;
     },
-    pause(){
-      this.isShowPlay=true
+    pause() {
+      this.isShowPlay = true;
     },
-    play(){
-      this.isShowPlay=false
-    }
-  }
-}
+    play() {
+      this.isShowPlay = false;
+    },
+  },
+};
 </script>
 
 <style>
@@ -102,10 +129,11 @@ export default {
   bottom: 0;
   width: 100%;
 }
-.login {
+.login,
+.logout {
   position: absolute;
-  top: 30px;
-  transform: translateX(-50%);
+  top: 60px;
+  /* transform: translateX(-50%); */
   margin-left: 50%;
   z-index: 100;
 }

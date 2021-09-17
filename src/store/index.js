@@ -19,9 +19,24 @@ const store=new Vuex.Store({
         musicUrl:"",
         mvUrl:"",
         showLogin:false,
+        showLogout:false,
+        dailyRecommend:[],
+        userInfo:{
+
+        }
 
     },
-    mutations:{},
+    mutations:{
+        showLogout(state,bool){
+            state.showLogout=bool
+        },
+        setUserInfo(state,profile){
+            state.userInfo=profile
+        },
+        setDailyRecommend(state,profile){
+            state.dailyRecommend=profile
+        }
+    },
     actions:{},
     getters:{},
     modules:{}

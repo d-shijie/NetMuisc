@@ -1,6 +1,7 @@
 {
   "name": "NetMusic",
   "version": "0.1.0",
+  "main": "main.js",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -21,6 +22,8 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.13",
     "@vue/cli-service": "^4.5.13",
-    "vue-template-compiler": "^2.6.14"
+    "vue-template-compiler": "^2.6.14",
+    "less": "^4.1.1",
+    "less-loader": "^10.0.1"
   }
 }

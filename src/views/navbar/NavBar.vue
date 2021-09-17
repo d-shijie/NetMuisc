@@ -22,43 +22,55 @@
 </template>
 
 <script>
-import {getSearchData} from "../../network/getSearchData";
+import { getSearchData } from "../../network/getSearchData";
 
 export default {
   name: "NavBar",
   mounted() {
-    this.$bus.$on("getHeadUrl",(url)=>{
-      this.headUrl=url
-    })
+    this.$bus.$on("getHeadUrl", (url) => {
+      this.headUrl = url;
+    });
+    this.$bus.$on("clearAvatarUrl", () => {
+      this.headUrl = require("../../assets/img/navbar/头像.png");
+    });
   },
-  data(){
+  data() {
     return {
       keywords: "",
-      headUrl:require("../../assets/img/navbar/头像.png")
-    }
+      headUrl: require("../../assets/img/navbar/头像.png"),
+    };
   },
   methods: {
-    getSearchData(){
-      if(this.$store.state.keywords!==""){
-      this.$router.push("/search")
-      getSearchData(this.$store.state.keywords,100,this.$store.state.singleSongsOffset,1)
-          .then(res=>{
-            this.$store.state.singleTotal=res.data.result.songCount
-            this.$store.state.singleSongs=res.data.result.songs
+    getSearchData() {
+      if (this.$store.state.keywords !== "") {
+        this.$router.push("/search");
+        getSearchData(
+          this.$store.state.keywords,
+          100,
+          this.$store.state.singleSongsOffset,
+          1
+        )
+          .then((res) => {
+            this.$store.state.singleTotal = res.data.result.songCount;
+            this.$store.state.singleSongs = res.data.result.songs;
           })
-          .catch(err=>{
-            console.log(err)
-          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
-    back(){
-      this.$router.back()
+    back() {
+      this.$router.back();
     },
-    headClick(){
-        this.$store.state.showLogin=true
-    }
-  }
-}
+    headClick() {
+      if (window.sessionStorage.getItem("userId")) {
+        this.$store.commit("showLogout", true);
+      } else {
+        this.$store.state.showLogin = true;
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -71,7 +83,7 @@ export default {
   cursor: pointer;
   border-radius: 50%;
 }
-img  {
+img {
   width: 90px;
   height: 100%;
 }
@@ -102,7 +114,7 @@ input {
   display: inline-block;
   border-radius: 50%;
   padding: 5px;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .other img {
   width: 30px;
@@ -117,7 +129,7 @@ input {
   padding: 10px;
   margin: 0 8px;
 }
-.other span:nth-child(5){
+.other span:nth-child(5) {
   border-right: 1px solid #eeeeee;
 }
 </style>

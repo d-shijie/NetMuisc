@@ -53,6 +53,7 @@ const DjPrograms=()=>import("../components/dj/DjProgram")
 const DjSubs=()=>import("../components/dj/DjSubs")
 const DjRank=()=>import("../views/findMusic/DjRank")
 const DjCategory=()=>import("../views/findMusic/DjCategory")
+const DailyRecommend=()=>import('../views/dailyRecommend/DailyRecommend.vue')
 const routes=[
     {
         redirect:"/findMusic",
@@ -267,6 +268,10 @@ const routes=[
     {
         path:"/djcategory/:id",
         component:DjCategory
+    },
+    {
+        path:'/dailyRecommend',
+        component:DailyRecommend
     }
 ];
 const router=new VueRouter({

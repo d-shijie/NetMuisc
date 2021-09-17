@@ -97,3 +97,8 @@ export function getDjCategoryRecommend(type){
         }
     })
 }
+export function getDailyRecommend(){
+    return request({
+        url:'/recommend/songs'
+    })
+}

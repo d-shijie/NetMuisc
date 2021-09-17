@@ -8,3 +8,11 @@ export function getProfileDetail(id){
         }
     })
 }
+export function getUserInfo(uid){
+      return request({
+          url:'/user/detail',
+          params:{
+              uid
+          }
+      })
+}

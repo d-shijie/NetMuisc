@@ -1,11 +1,9 @@
 <template>
-  <div ref="login" v-drag  v-if="$store.state.showLogin" class="login">
+  <div ref="login" v-drag v-if="$store.state.showLogin" class="login">
     <span @click="close" class="close">X</span>
     <div v-if="show" class="qr-login">
       <h2>扫码登录</h2>
-      <div class="qr-code">
-        二维码
-      </div>
+      <div class="qr-code">二维码</div>
       <p>使用<a href="javaScript:;">网易云音乐APP</a>扫码登录</p>
       <div class="other">
         <i @click="otherClick">选择其他登录方式></i>
@@ -13,13 +11,20 @@
     </div>
     <div v-else class="other-login">
       <span @click="shift" class="shift">
-         <img src="../../assets/img/login/音乐.png" alt="">
-       </span>
+        <img src="../../assets/img/login/音乐.png" alt="" />
+      </span>
       <span class="text"><span class="little"></span>扫码登录更安全</span>
       <div class="background">
-        <img src="../../assets/img/login/login.webp" alt="">
+        <img src="../../assets/img/login/login.webp" alt="" />
       </div>
-      <el-form size="mini" :model="loginRuleForm" :rules="loginRules" ref="loginRuleForm" label-width="100px" class="demo-ruleForm">
+      <el-form
+        size="mini"
+        :model="loginRuleForm"
+        :rules="loginRules"
+        ref="loginRuleForm"
+        label-width="100px"
+        class="demo-ruleForm"
+      >
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="loginRuleForm.phone"></el-input>
         </el-form-item>
@@ -28,114 +33,146 @@
         </el-form-item>
       </el-form>
       <div><el-checkbox v-model="checked">自动登录</el-checkbox></div>
-      <div  class="login-btn"> <el-button @click="login" type="danger">登录</el-button></div>
+      <div class="login-btn">
+        <el-button @click="login" type="danger">登录</el-button>
+      </div>
       <div class="register">
         <a href="javascript:;">注册</a>
       </div>
       <div class="brands">
-        <span><img src="../../assets/img/login/微信.jpg" alt=""></span>
-        <span><img src="../../assets/img/login/QQ.jpg" alt=""></span>
-        <span><img src="../../assets/img/login/网易.jpg" alt=""></span>
-        <span><img src="../../assets/img/login/微博.jpg" alt=""></span>
+        <span><img src="../../assets/img/login/微信.jpg" alt="" /></span>
+        <span><img src="../../assets/img/login/QQ.jpg" alt="" /></span>
+        <span><img src="../../assets/img/login/网易.jpg" alt="" /></span>
+        <span><img src="../../assets/img/login/微博.jpg" alt="" /></span>
       </div>
-      <el-checkbox v-model="checked2">同意 <a href="javascript:;">《服务条款》</a>
+      <el-checkbox v-model="checked2"
+        >同意 <a href="javascript:;">《服务条款》</a>
         <a href="javascript:;">《隐私政策》</a>
-        <a href="javascript:;">《儿童隐私政策》</a></el-checkbox>
+        <a href="javascript:;">《儿童隐私政策》</a></el-checkbox
+      >
     </div>
   </div>
 </template>
 
 <script>
-import {getPhoneLogin} from "../../network/getLoginData";
-import {getFindMusicPersonalizeMusicList} from "../../network/getFindMusicData";
-
+import { getPhoneLogin } from "../../network/getLoginData";
+import {
+  getFindMusicPersonalizeMusicList,
+  getDailyRecommend,
+} from "../../network/getFindMusicData";
+import { getUserInfo } from "../../network/getProfileData";
 export default {
   name: "Login",
-  data(){
+  data() {
     return {
-      show:true,
-      checked:false,
-      checked2:false,
-      loginRuleForm:{
-        phone:"13658229170",
-        password:"asd85134477"
+      show: true,
+      checked: false,
+      checked2: false,
+      loginRuleForm: {
+        phone: "13658229170",
+        password: "asd85134477",
       },
-      loginRules:{
-        phone: [{required:true,message:"请输入手机号",trigger:"blur"},
-          {min:11,max:11,message: "请输入正确的手机号",trigger: "blur"}],
-        password: [{required:true,message:"请输入密码",trigger:"blur"},
-          {min:6,max:18,message: "请输入正确的密码",trigger: "blur"}]
-      }
-    }
+      loginRules: {
+        phone: [
+          { required: true, message: "请输入手机号", trigger: "blur" },
+          { min: 11, max: 11, message: "请输入正确的手机号", trigger: "blur" },
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 6, max: 18, message: "请输入正确的密码", trigger: "blur" },
+        ],
+      },
+    };
   },
-  methods:{
-    close(){
-      this.$store.state.showLogin=false
+  methods: {
+    close() {
+      this.$store.state.showLogin = false;
     },
-    otherClick(){
-      this.show=false
+    otherClick() {
+      this.show = false;
     },
-    shift(){
-      this.show=true
+    shift() {
+      this.show = true;
     },
-    login(){
-      this.$refs.loginRuleForm.validate(valid=>{
-        if(valid===false){
-          this.$message.error("请填写正确账号密码")
-        }else if(this.checked2===false) {
-          this.$message.error("请勾选下方协议")
-        }else {
-          getPhoneLogin(this.loginRuleForm.phone,this.loginRuleForm.password).then(res=>{
-            window.localStorage.setItem("token",res.data.token)
-            this.$bus.$emit("getHeadUrl",res.data.profile.avatarUrl)
-            this.$store.state.showLogin=false
-            console.log(res)
-            getFindMusicPersonalizeMusicList().then(res=>{
-              console.log(res)
-            }).catch(err=>{
-              console.log(err)
+    login() {
+      this.$refs.loginRuleForm.validate((valid) => {
+        if (valid === false) {
+          this.$message.error("请填写正确账号密码");
+        } else if (this.checked2 === false) {
+          this.$message.error("请勾选下方协议");
+        } else {
+          getPhoneLogin(this.loginRuleForm.phone, this.loginRuleForm.password)
+            .then((res) => {
+              window.localStorage.setItem("token", res.data.token);
+              this.$bus.$emit("getHeadUrl", res.data.profile.avatarUrl);
+              window.sessionStorage.setItem("userId", res.data.account.id);
+              this.$store.state.showLogin = false;
+              getDailyRecommend()
+                .then((res) => {
+                  this.$store.commit(
+                    "setDailyRecommend",
+                    res.data.data.dailySongs
+                  );
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+              getFindMusicPersonalizeMusicList()
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+              getUserInfo(res.data.account.id)
+                .then((res) => {
+                  this.$store.commit("setUserInfo", res.data);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
             })
-          }).catch(err=>{
-            console.log(err)
-          })
+            .catch((err) => {
+              console.log(err);
+            });
         }
-      })
-    }
+      });
+    },
   },
-  directives:{
+  directives: {
     drag: function (el) {
       let dragBox = el; //获取当前元素
-      let imgMakeBox;//父盒子
-      let moveW = 0;//移动元素的width
+      let imgMakeBox; //父盒子
+      let moveW = 0; //移动元素的width
       let moveH = 0; //移动元素的height
-      let parentW = 0;//父盒子的width
-      let parentH = 0;//父盒子的height
-      dragBox.onmousedown = e => {
-        imgMakeBox = document.getElementById('app');
+      let parentW = 0; //父盒子的width
+      let parentH = 0; //父盒子的height
+      dragBox.onmousedown = (e) => {
+        imgMakeBox = document.getElementById("app");
         moveW = dragBox.offsetWidth;
         moveH = dragBox.offsetHeight;
-        parentW = imgMakeBox.offsetWidth;//父盒子的width
-        parentH = imgMakeBox.offsetHeight;//父盒子的height
+        parentW = imgMakeBox.offsetWidth; //父盒子的width
+        parentH = imgMakeBox.offsetHeight; //父盒子的height
         let disX = e.pageX - dragBox.offsetLeft;
         let disY = e.pageY - dragBox.offsetTop;
-        document.onmousemove = e => {
+        document.onmousemove = (e) => {
           let left = e.pageX - disX;
           let top = e.pageY - disY;
           let resW = parentW - moveW;
           let resH = parentH - moveH;
           left = left >= resW ? resW : left <= 0 ? 0 : left;
           top = top >= resH ? resH : top <= 0 ? 0 : top;
-          dragBox.style.left = left-350 + "px";
+          dragBox.style.left = left - 350 + "px";
           dragBox.style.top = top + "px";
         };
-        document.onmouseup = e => {
+        document.onmouseup = (e) => {
           document.onmousemove = null;
           document.onmouseup = null;
         };
       };
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -158,7 +195,8 @@ export default {
   border: 1px solid #eeeeee;
   height: 30px;
 }
-.login-btn,.register {
+.login-btn,
+.register {
   margin: 15px 0;
   text-align: center;
 }
@@ -173,10 +211,10 @@ export default {
 .el-button {
   width: 200px;
 }
-.el-checkbox:nth-child(2){
+.el-checkbox:nth-child(2) {
   font-size: 12px;
 }
-.el-checkbox:nth-child(1){
+.el-checkbox:nth-child(1) {
   margin: 0 50px;
 }
 .background {
@@ -190,7 +228,7 @@ export default {
   display: inline-block;
   width: 0;
   border: 6px solid transparent;
-  border-top-color:#adadad ;
+  border-top-color: #adadad;
   border-right-color: #adadad;
   top: 0;
   left: -7px;
