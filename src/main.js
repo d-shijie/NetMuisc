@@ -7,19 +7,22 @@ import ElementUi from "element-ui"
 import VueLazyload from "vue-lazyload";
 import 'element-ui/lib/theme-chalk/index.css';
 axios.defaults.baseURL = "/api"
-axios.defaults.withCredentials = true
-
+//挂载axios在原型上 基本没用这种用法
 Vue.prototype.$http = axios
 Vue.use(ElementUi)
+// 用于图片懒加载 中途加的 没用到 img的src改为v-lazy
 Vue.use(VueLazyload)
 Vue.config.productionTip = false
+//事件总线 $on $emit
 Vue.prototype.$bus = new Vue()
+//全局时间过滤器
 Vue.filter("timeFormat", (value) => {
   const time = new Date(value)
   const m = (time.getMinutes() + "").padStart(2, "0")
   const s = (time.getSeconds() + "").padStart(2, "0")
   return m + ":" + s
 })
+//全局日期过滤器
 Vue.filter("dateFormat", (value) => {
   const time = new Date(value)
   const year = time.getFullYear()
@@ -27,6 +30,7 @@ Vue.filter("dateFormat", (value) => {
   const day = (time.getDate() + "").padStart(2, "0")
   return year + "-" + month + "-" + day
 })
+// 全局事件过滤器 精确到分钟
 Vue.filter("detailTimeFormat", (value) => {
   const time = new Date(value)
   const year = time.getFullYear()
@@ -37,56 +41,6 @@ Vue.filter("detailTimeFormat", (value) => {
   const s = (time.getSeconds() + "").padStart(2, "0")
   return year + "年" + month + "月" + day + "日" + " " + hour + ":" + m
 })
-// const {app, BrowserWindow} = require('electron')
-// const path = require('path')
-// const url = require('url')
-// // Keep a global reference of the window object, if you don't, the window will
-// // be closed automatically when the JavaScript object is garbage collected.
-// let win
-// function createWindow () {
-//   // Create the browser window.
-//   win = new BrowserWindow({width: 800, height: 600})
-//   // and load the index.html of the app.
-//   win.loadURL(url.format({
-//     pathname: path.join(__dirname, 'index.html'),
-//     protocol: 'file:',
-//     slashes: true
-//   }))
-//
-//   // Open the DevTools.
-//   // win.webContents.openDevTools()
-//
-//   // Emitted when the window is closed.
-//   win.on('closed', () => {
-//     // Dereference the window object, usually you would store windows
-//     // in an array if your app supports multi windows, this is the time
-//     // when you should delete the corresponding element.
-//     win = null
-//   })
-// }
-//
-// // This method will be called when Electron has finished
-// // initialization and is ready to create browser windows.
-// // Some APIs can only be used after this event occurs.
-// app.on('ready', createWindow)
-//
-// // Quit when all windows are closed.
-// app.on('window-all-closed', () => {
-//   // On macOS it is common for applications and their menu bar
-//   // to stay active until the user quits explicitly with Cmd + Q
-//   if (process.platform !== 'darwin') {
-//     app.quit()
-//   }
-// })
-//
-// app.on('activate', () => {
-//   // On macOS it's common to re-create a window in the app when the
-//   // dock icon is clicked and there are no other windows open.
-//   if (win === null) {
-//     createWindow()
-//   }
-// })
-
 new Vue({
   render: h => h(App),
   router,

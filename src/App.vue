@@ -54,19 +54,19 @@ export default {
   name: "App",
   data() {
     return {
-      keywords: "",
-      choices: ["发现音乐", "视频", "朋友", "直播", "私人FM"],
+      keywords: "",//搜索关键字
+      choices: ["发现音乐", "视频", "朋友", "直播", "私人FM"],//侧边栏标题
       scroll: "",
-      is_play: false,
-      isShowPlay: true,
+      is_play: false,//控制audio
+      isShowPlay: true,//控制audio显示
       myMusics: [
         "本地与下载",
         "最近播放",
         "我的音乐云盘",
         "我的播客",
         "我的收藏",
-      ],
-      path: ["/local", "/recent", "/cloud", "/client", "/collect"],
+      ],//侧边栏标题
+      path: ["/local", "/recent", "/cloud", "/client", "/collect"],//侧边栏前往地址
     };
   },
   computed: {
@@ -85,15 +85,19 @@ export default {
     MyMusic,
   },
   methods: {
+    // 发送auido当前时间
     timeUpdate(time) {
       this.$bus.$emit("timeUpdate", this.$refs.audio.currentTime);
     },
+    // 暂定auido
     audioPause() {
       this.$refs.audio.pause();
     },
+    // 播放audio
     audioPlay() {
       this.$refs.audio.play();
     },
+    // 
     getKeywords(keywords) {
       this.keywords = keywords;
     },

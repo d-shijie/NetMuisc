@@ -5,7 +5,7 @@
         <img class="banner" :src="item.imageUrl" alt="" />
       </el-carousel-item>
     </el-carousel>
-    <SmallTitle :text="'推荐歌单'"></SmallTitle>
+    <SmallTitle path='/findMusic/singers' :text="'推荐歌单'"></SmallTitle>
     <div class="recommend-music-list">
       <div @click="goto" class="everyday-recommend">
         <img src="../../assets/img/login/音乐.png" alt="" />
@@ -54,7 +54,7 @@
         <p>{{ item.name }}</p>
       </div>
     </div>
-    <SmallTitle :text="'最新音乐'"></SmallTitle>
+    <SmallTitle path='/findMusic/searchlyric' :text="'最新音乐'"></SmallTitle>
     <div class="new-music">
       <div class="new-music-item" v-for="(item, index) in newMusic">
         <div @click="newMusicItemClick(item)" class="new-music-item-img">
@@ -73,7 +73,7 @@
         </div>
       </div>
     </div>
-    <SmallTitle :text="'推荐MV'"></SmallTitle>
+    <SmallTitle path='/video/singers' :text="'推荐MV'"></SmallTitle>
     <div class="recommend-mv">
       <div
         @click="$router.push('/mv/' + item.id)"
@@ -85,7 +85,7 @@
         <p>{{ item.name }}</p>
       </div>
     </div>
-    <SmallTitle :text="'主播电台'"></SmallTitle>
+    <SmallTitle path='https://look.163.com/hot' :text="'主播电台'"></SmallTitle>
     <div class="recommend-djs">
       <div
         @click="$router.push('/dj/' + item.id)"

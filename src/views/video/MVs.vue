@@ -14,12 +14,12 @@
       </ul>
     </div>
     <SmallTitle path="/allmv" text="最新MV"></SmallTitle>
-    <all-list-2  :itemList="musics['最新'].list"></all-list-2>
+    <all-list-2 :itemList="musics['最新'].list"></all-list-2>
     <SmallTitle path="/allmv" text="热播MV"></SmallTitle>
     <all-list-2 :itemList="musics['最热'].list"></all-list-2>
     <SmallTitle path="/allmv" text="网易出品MV"></SmallTitle>
     <all-list-2 :itemList="musics['网易出品'].list"></all-list-2>
-    <SmallTitle text="MV排行榜"></SmallTitle>
+    <SmallTitle path="/mvRank" text="MV排行榜"></SmallTitle>
     <div class="types">
       <span
         @click="typeClick(index, item)"
@@ -79,17 +79,21 @@ export default {
     };
   },
   created() {
-    this.getAllMv("内地", "最新", 6);
-    this.getAllMv("内地", "最热", 6);
-    this.getAllMv("内地", "网易出品", 6);
+    this.getAllMv("内地", "", "最新", 6);
+    this.getAllMv("内地", "", "最热", 6);
+    this.getAllMv("内地", "网易出品", "", 6);
     this.getMVBank("内地");
   },
   methods: {
     // 获取mv列表
-    getAllMv(area, type, limit) {
-      getAllMv(area, type, limit)
+    getAllMv(area, type, order, limit) {
+      getAllMv(area, type, order, limit)
         .then((res) => {
-          this.musics[type].list = res.data.data;
+          if (type) {
+            this.musics[type].list = res.data.data;
+          } else if (order) {
+            this.musics[order].list = res.data.data;
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -109,7 +113,7 @@ export default {
     itemClick(index) {
       this.currentIndex = index;
       this.tagName = this.tags[index];
-      this.getAllMv(this.tags[index], "最新", 6);
+      this.getAllMv(this.tags[index], "", "最新", 6);
     },
     //mv排行分类点击事件
     typeClick(index, item) {

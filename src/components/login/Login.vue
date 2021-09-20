@@ -107,6 +107,7 @@ export default {
               this.$bus.$emit("getHeadUrl", res.data.profile.avatarUrl);
               window.sessionStorage.setItem("userId", res.data.account.id);
               this.$store.state.showLogin = false;
+              this.$store.commit("setShowFriend", true);
               getDailyRecommend()
                 .then((res) => {
                   this.$store.commit(

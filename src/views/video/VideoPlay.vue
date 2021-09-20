@@ -46,6 +46,12 @@
         >
         <a>举报</a>
       </div>
+      <el-input :rows="3" type="textarea"> </el-input>
+      <div class="send">
+        <span>@</span>
+        <span>#</span>
+        <el-button class="send-btn" size="mini" round>发送</el-button>
+      </div>
       <h4>热门评论</h4>
       <comment :comments="hotComments"></comment>
       <h4>最新评论</h4>
@@ -89,15 +95,15 @@ export default {
   name: "VideoPlay",
   data() {
     return {
-      videoUrl: "",// 视频播放地址
-      creatorInfo: {},// 作者信息
-      videoDetail: {},// 视频详情
-      videoInfo: {},// 视频数据
-      hotComments: [],//热门评论
-      comments: [],// 评论列表
-      total: 0,//评论总数
-      offset: 0,// 评论页数
-      similarVideos: [],//相似视频
+      videoUrl: "", // 视频播放地址
+      creatorInfo: {}, // 作者信息
+      videoDetail: {}, // 视频详情
+      videoInfo: {}, // 视频数据
+      hotComments: [], //热门评论
+      comments: [], // 评论列表
+      total: 0, //评论总数
+      offset: 0, // 评论页数
+      similarVideos: [], //相似视频
     };
   },
   filters: {
@@ -113,7 +119,7 @@ export default {
     this.getSimilarVideos(this.$route.params.id);
   },
   methods: {
-      // 获取视频播放地址
+    // 获取视频播放地址
     getVideoUrl(id) {
       getVideoUrl(id)
         .then((res) => {
@@ -247,6 +253,18 @@ video {
 }
 a:hover {
   color: #000;
+}
+.send {
+  position: relative;
+  margin: 10px 0 30px 0;
+}
+.send span {
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 10px;
+}
+.send-btn {
+  float: right;
 }
 .right {
   margin-left: 20px;

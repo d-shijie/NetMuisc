@@ -11,13 +11,13 @@
         <div class="count">
           {{ this.$store.state.userInfo.profile.follows }}
         </div>
-        <div class="text">动态</div>
+        <div class="text">关注</div>
       </span>
       <span class="fans">
         <div class="count">
           {{ this.$store.state.userInfo.profile.followeds }}
         </div>
-        <div class="text">动态</div>
+        <div class="text">粉丝</div>
       </span>
     </div>
     <el-button size="medium" round>签到</el-button>
@@ -82,8 +82,8 @@ export default {
       logout()
         .then((res) => {
           window.sessionStorage.clear();
-          this.$bus.$emit('clearAvatarUrl')
-          this.$store.commit('setUserInfo',{})
+          this.$bus.$emit("clearAvatarUrl");
+          this.$store.commit("setUserInfo", {});
         })
         .catch((err) => {
           console.log(err);

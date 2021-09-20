@@ -61,6 +61,7 @@ const Client = () => import('../views/client/Client.vue')
 const Collect = () => import('../views/collect/Collect.vue')
 const VideoPlay = () => import('../views/video/VideoPlay.vue')
 const AllMV = () => import('../views/allMV/AllMV.vue')
+const MVRank = () => import('../components/mv/MVRank.vue')
 const routes = [
     {
         redirect: "/findMusic",
@@ -307,6 +308,10 @@ const routes = [
     {
         path: "/allmv",
         component: AllMV
+    },
+    {
+        path: "/mvRank",
+        component: MVRank
     }
 ];
 const router = new VueRouter({
