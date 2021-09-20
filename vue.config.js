@@ -2,15 +2,17 @@ const path = require("path");
 function resolve(dir) {
     return path.join(__dirname, dir);
 }
-module.exports={
+module.exports = {
     devServer: {
         https: false,
-        open:true,
-        proxy:{
+        open: true,
+        proxy: {
             '/api': {
+
                 target: 'https://nicemusic-api.lxhcool.cn/',
+                // 允许跨域
                 changeOrigin: true,
-                secure:false,
+                ws: true,
                 pathRewrite: {
                     '^/api': ''
                 }

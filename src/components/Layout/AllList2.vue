@@ -1,12 +1,20 @@
 <template>
   <div class="all-list">
-    <div @click="itemClick(item)" class="item" v-for="(item,index) in itemList">
+    <div
+      @click="itemClick(item)"
+      class="item"
+      v-for="(item, index) in itemList"
+    >
       <div class="img">
-        <span  class="play-count">{{item.playCount||item.playTime|playCountFormat}}</span>
-        <span class="time">{{item.duration||item.durationms|timeFormat}}</span>
-        <img :src="item.imgurl||item.coverUrl" alt="">
+        <span class="play-count">{{
+          item.playCount || item.playTime | playCountFormat
+        }}</span>
+        <span class="time">{{
+          item.duration || item.durationms | timeFormat
+        }}</span>
+        <img :src="item.imgurl || item.coverUrl || item.cover" alt="" />
       </div>
-      <p>{{item.name||item.title}}</p>
+      <p>{{ item.name || item.title }}</p>
     </div>
   </div>
 </template>
@@ -14,29 +22,29 @@
 <script>
 export default {
   name: "AllList2",
-  props:{
-    itemList:{
-      type:Array,
-      default(){
-        return []
-      }
-    }
+  props: {
+    itemList: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
-  methods:{
-    itemClick(item){
-      if(item.id){
-        this.$router.push("/mv/"+item.id)
-      }else if(item.vid){
-        this.$router.push("/mv/"+item.vid)
+  methods: {
+    itemClick(item) {
+      if (item.id) {
+        this.$router.push("/mv/" + item.id);
+      } else if (item.vid) {
+        this.$router.push("/mv/" + item.vid);
       }
-    }
+    },
   },
-  filters:{
-    playCountFormat(value){
-      return value>10000? (value/10000).toFixed(0)+"万":value
-    }
-  }
-}
+  filters: {
+    playCountFormat(value) {
+      return value > 10000 ? (value / 10000).toFixed(0) + "万" : value;
+    },
+  },
+};
 </script>
 
 <style scoped>

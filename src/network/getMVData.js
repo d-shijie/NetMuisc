@@ -1,44 +1,73 @@
-import {request} from "./request";
-export function getMVUrl(id){
+import { request } from "./request";
+//所有MV
+export function getAllMv(area,type, order, limit,offset,) {
     return request({
-        url:"/mv/url",
-        params:{
+        url: "/mv/all",
+        params: {
+            area,
+            type,
+            order,
+            limit,
+            offset
+        }
+    })
+}
+// mv播放地址
+export function getMVUrl(id) {
+    return request({
+        url: "/mv/url",
+        params: {
             id
         }
     })
 }
-export function getMVInfo(id){
+// mv信息
+export function getMVInfo(id) {
     return request({
-        url:"/mv/detail",
-        params:{
-            mvid:id
+        url: "/mv/detail",
+        params: {
+            mvid: id
         }
     })
 }
-export function getMVCount(id){
+// mv评论转发数
+export function getMVCount(id) {
     return request({
-        url:"/mv/detail/info",
-        params:{
-            mvid:id,
+        url: "/mv/detail/info",
+        params: {
+            mvid: id,
 
         }
     })
 }
-export function getMVComment(id,limit,offset){
+// mv评论
+export function getMVComment(id, limit, offset) {
     return request({
-        url:"/comment/mv",
-        params:{
+        url: "/comment/mv",
+        params: {
             id,
             limit,
             offset
         }
     })
 }
-export function getSimiMV(id){
+// 相似MV
+export function getSimiMV(id) {
     return request({
-        url:"/simi/mv",
-        params:{
-            mvid:id
+        url: "/simi/mv",
+        params: {
+            mvid: id
+        }
+    })
+}
+// mv排行
+export function getMVBank(limit, area, offset) {
+    return request({
+        url: "/top/mv",
+        params: {
+            limit,
+            area,
+            offset
         }
     })
 }

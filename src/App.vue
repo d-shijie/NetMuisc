@@ -9,10 +9,11 @@
       <el-container>
         <el-aside width="200px">
           <tab-bar :choices="choices"></tab-bar>
+          <my-music :path="path" :myMusics="myMusics"></my-music>
         </el-aside>
         <el-main>
           <keep-alive
-            exclude="Search,Singer,Album,MV,MusicList,Profile,Dj,DjCategory,DailyReommend"
+            exclude="Search,Singer,Album,MV,MusicList,Profile,Dj,DjCategory,DailyReommend,VideoPlay,AllMV"
           >
             <router-view
               :is-show-play="isShowPlay"
@@ -47,6 +48,8 @@ import NavBar from "./views/navbar/NavBar";
 import TabBar from "./components/tabbar/TabBar";
 import Login from "./components/login/Login";
 import Logout from "./components/logout/Logout.vue";
+import MyMusic from "./components/myMusic/MyMusic.vue";
+
 export default {
   name: "App",
   data() {
@@ -56,6 +59,14 @@ export default {
       scroll: "",
       is_play: false,
       isShowPlay: true,
+      myMusics: [
+        "本地与下载",
+        "最近播放",
+        "我的音乐云盘",
+        "我的播客",
+        "我的收藏",
+      ],
+      path: ["/local", "/recent", "/cloud", "/client", "/collect"],
     };
   },
   computed: {
@@ -71,6 +82,7 @@ export default {
     TabBar,
     Login,
     Logout,
+    MyMusic,
   },
   methods: {
     timeUpdate(time) {
