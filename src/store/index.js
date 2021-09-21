@@ -26,6 +26,9 @@ const store = new Vuex.Store({
 
     },
     mutations: {
+        setShowLogin(state, bool) {
+            state.showLogin = bool
+        },
         showLogout(state, bool) {
             state.showLogout = bool
         },

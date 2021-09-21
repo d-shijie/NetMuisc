@@ -13,7 +13,8 @@
         </el-aside>
         <el-main>
           <keep-alive
-            exclude="Search,Singer,Album,MV,MusicList,Profile,Dj,DjCategory,DailyReommend,VideoPlay,AllMV"
+            exclude="Search,Singer,Album,MV,MusicList,Profile,Dj,DjCategory,DailyReommend,VideoPlay,AllMV,TopicDetail,
+            Gender,Follow,Followed"
           >
             <router-view
               :is-show-play="isShowPlay"
@@ -54,19 +55,19 @@ export default {
   name: "App",
   data() {
     return {
-      keywords: "",//搜索关键字
-      choices: ["发现音乐", "视频", "朋友", "直播", "私人FM"],//侧边栏标题
+      keywords: "", //搜索关键字
+      choices: ["发现音乐", "视频", "朋友", "直播", "私人FM"], //侧边栏标题
       scroll: "",
-      is_play: false,//控制audio
-      isShowPlay: true,//控制audio显示
+      is_play: false, //控制audio
+      isShowPlay: true, //控制audio显示
       myMusics: [
         "本地与下载",
         "最近播放",
         "我的音乐云盘",
         "我的播客",
         "我的收藏",
-      ],//侧边栏标题
-      path: ["/local", "/recent", "/cloud", "/client", "/collect"],//侧边栏前往地址
+      ], //侧边栏标题
+      path: ["/local", "/recent", "/cloud", "/client", "/collect"], //侧边栏前往地址
     };
   },
   computed: {
@@ -97,7 +98,7 @@ export default {
     audioPlay() {
       this.$refs.audio.play();
     },
-    // 
+    //
     getKeywords(keywords) {
       this.keywords = keywords;
     },
@@ -107,6 +108,9 @@ export default {
     play() {
       this.isShowPlay = false;
     },
+    // closeLogout() {
+    //   this.$store.commit("setShowLogout", false);
+    // },
   },
 };
 </script>

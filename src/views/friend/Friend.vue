@@ -7,11 +7,11 @@
       </div>
     </div>
     <div class="right">
-      <div v-if="$store.state.showFriend === false" class="no-login">
+      <div v-if="!$store.state.showFriend" class="no-login">
         <img src="../../assets/img/login/网易.jpg" alt="" />
-        <el-button round type="danger">立即登录</el-button>
+        <el-button @click="login" round type="danger">立即登录</el-button>
       </div>
-      <div v-if="$store.state.showFriend === true" class="user">
+      <div v-else class="user">
         <span> <img :src="headUrl" alt="" /></span>
         <span class="nickname">{{
           this.$store.state.userInfo.profile.nickname
@@ -37,17 +37,43 @@
           </span>
         </div>
       </div>
+      <div class="hot-topic">
+        <div class="top">
+          <span><h6>热门话题</h6></span>
+          <span @click="gotoTopic" class="more">更多</span>
+        </div>
+        <div
+          @click="goto(item.actId)"
+          class="topic"
+          v-for="(item, index) in hotTopics"
+          :key="item.actId"
+        >
+          <span><img :src="item.sharePicUrl" alt="" /></span>
+          <span class="topic-info">
+            <div class="topic-title">#{{ item.title }}#</div>
+            <div class="topic-count">{{ item.participateCount }}人参与</div>
+          </span>
+        </div>
+        <div class="add-friend">
+          <h6>添加关注</h6>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getHotTopic } from "../../network/getTopicData";
 export default {
   name: "Friend",
   data() {
     return {
-      headUrl: "",
+      headUrl: "", //头像地址
+      hotTopics: [], //热门话题
     };
+  },
+  created() {
+    this.getHotTopic(5);
   },
   mounted() {
     this.$bus.$on("getHeadUrl", (url) => {
@@ -66,10 +92,67 @@ export default {
       }
     },
   },
+  methods: {
+    // 获取热门话题
+    getHotTopic(limit, offset) {
+      getHotTopic(limit, offset)
+        .then((res) => {
+          this.hotTopics = res.data.hot;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    goto(id) {
+      this.$router.push("/topicDetail/" + id);
+    },
+    gotoTopic() {
+      this.$router.push("/topic");
+    },
+    login() {
+      this.$store.commit("setShowLogin", true);
+    },
+  },
 };
 </script>
 
 <style scoped>
+.hot-topic {
+  margin: 30px 15px 25px 15px;
+}
+.more {
+  cursor: pointer;
+  font-size: 12px;
+  color: #949494;
+}
+.topic {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+.topic:hover {
+  background-color: #f2f2f2;
+}
+.topic img {
+  margin-right: 5px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+.topic-info {
+  display: flex;
+  color: #4d4d4d;
+  flex-direction: column;
+  justify-content: space-around;
+  font-size: 12px;
+}
+.topic-title {
+  margin-bottom: 5px;
+}
+.topic-count {
+  color: #afafaf;
+}
 .friend {
   display: flex;
 }

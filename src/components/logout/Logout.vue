@@ -1,27 +1,27 @@
 <template>
   <div @click="close" class="logout" v-if="$store.state.showLogout">
     <div class="top-count">
-      <span class="activity">
+      <span @click="goto('/gender/')" class="activity">
         <div class="count">
           {{ this.$store.state.userInfo.profile.gender }}
         </div>
         <div class="text">动态</div>
       </span>
-      <span class="flowed">
+      <span @click="goto('/follow/')" class="flowed">
         <div class="count">
           {{ this.$store.state.userInfo.profile.follows }}
         </div>
         <div class="text">关注</div>
       </span>
-      <span class="fans">
+      <span @click="goto('/followed/')" class="fans">
         <div class="count">
           {{ this.$store.state.userInfo.profile.followeds }}
         </div>
         <div class="text">粉丝</div>
       </span>
     </div>
-    <el-button size="medium" round>签到</el-button>
-    <logout-item :border="true">
+    <el-button size="medium" @click="signIn" round>签到</el-button>
+    <logout-item @click.native="gotoProfile" :border="true">
       <div class="el-icon-user" slot="left"></div>
       <div slot="center">我的信息</div>
       <div class="el-icon-arrow-right" slot="right"></div>
@@ -66,6 +66,7 @@
 <script>
 import { logout } from "../../network/getLoginData";
 import LogoutItem from "./LogoutItem.vue";
+import { singIn } from "../../network/getProfileData";
 export default {
   components: { LogoutItem },
   data() {
@@ -78,16 +79,38 @@ export default {
     close() {
       this.$store.commit("showLogout", false);
     },
+    //账号退出
     logout() {
       logout()
         .then((res) => {
           window.sessionStorage.clear();
           this.$bus.$emit("clearAvatarUrl");
           this.$store.commit("setUserInfo", {});
+          this.$store.commit("setShowFriend", false);
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    // 签到
+    signIn() {
+      singIn()
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message.error({
+            message: "今日已签到",
+          });
+        });
+    },
+    gotoProfile() {
+      this.$router.push("/profile/" + window.sessionStorage.getItem("userId"));
+    },
+    goto(path) {
+      let id = window.sessionStorage.getItem("userId");
+      this.$router.push(path + id);
     },
   },
 };

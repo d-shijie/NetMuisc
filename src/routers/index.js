@@ -62,6 +62,11 @@ const Collect = () => import('../views/collect/Collect.vue')
 const VideoPlay = () => import('../views/video/VideoPlay.vue')
 const AllMV = () => import('../views/allMV/AllMV.vue')
 const MVRank = () => import('../components/mv/MVRank.vue')
+const TopicDetail = () => import('../views/friend/TopicDetail.vue')
+const Topic = () => import('../views/friend/Topic.vue')
+const Gender = () => import('../views/gender/Gender.vue')
+const Follow = () => import('../views/follow/Follow.vue')
+const Followed = () => import('../views/follow/Followed.vue')
 const routes = [
     {
         redirect: "/findMusic",
@@ -312,6 +317,26 @@ const routes = [
     {
         path: "/mvRank",
         component: MVRank
+    },
+    {
+        path: "/topicDetail/:id",
+        component: TopicDetail
+    },
+    {
+        path: '/topic',
+        component: Topic
+    },
+    {
+        path: "/gender/:id",
+        component: Gender
+    },
+    {
+        path: '/follow/:id',
+        component: Follow
+    },
+    {
+        path: "/followed/:id",
+        component: Followed
     }
 ];
 const router = new VueRouter({

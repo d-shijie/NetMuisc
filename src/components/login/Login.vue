@@ -119,9 +119,7 @@ export default {
                   console.log(err);
                 });
               getFindMusicPersonalizeMusicList()
-                .then((res) => {
-                  console.log(res);
-                })
+                .then((res) => {})
                 .catch((err) => {
                   console.log(err);
                 });

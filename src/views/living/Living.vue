@@ -1,15 +1,14 @@
 <template>
-<div class="living">
-  <h2>直播</h2>
-</div>
+  <div class="living">
+    <h2>未找到直播接口</h2>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "Living"
-}
+  name: "Living",
+};
 </script>
 
 <style scoped>
-
 </style>
