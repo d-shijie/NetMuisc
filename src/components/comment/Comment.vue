@@ -1,21 +1,34 @@
 <template>
   <div class="comment">
-    <div @mouseleave="mouseLeave" @mouseenter="mouseEnter(index)" class="row" v-for="(item,index) in comments">
-      <img class="head-icon" :src="item.user.avatarUrl" alt="">
+    <div
+      @mouseleave="mouseLeave"
+      @mouseenter="mouseEnter(index)"
+      class="row"
+      v-for="(item, index) in comments"
+    >
+      <img class="head-icon" :src="item.user.avatarUrl" alt="" />
       <div class="info">
         <div class="text">
-          <span class="nickname">{{item.user.nickname}}:</span>
-          <span>{{item.content}}</span>
+          <span @click="gotoProfile(item)" class="nickname"
+            >{{ item.user.nickname }}:</span
+          >
+          <span>{{ item.content }}</span>
         </div>
         <div class="date">
-          <p class="time">{{item.time|detailTimeFormat}}</p>
+          <p class="time">{{ item.time | detailTimeFormat }}</p>
         </div>
       </div>
       <div class="btns">
-        <el-button v-if="currentIndex===index" round size="mini">举报</el-button>
+        <el-button v-if="currentIndex === index" round size="mini"
+          >举报</el-button
+        >
         <el-button round size="mini" class="el-icon-thumb"></el-button>
         <el-button round size="mini" class="el-icon-position"></el-button>
-        <el-button round size="mini" class="el-icon-chat-line-square"></el-button>
+        <el-button
+          round
+          size="mini"
+          class="el-icon-chat-line-square"
+        ></el-button>
       </div>
     </div>
   </div>
@@ -24,28 +37,31 @@
 <script>
 export default {
   name: "Comment",
-  data(){
+  data() {
     return {
-      currentIndex:""
-    }
+      currentIndex: "",
+    };
   },
-  props:{
-    comments:{
-      type:Array,
-      default(){
-        return []
-      }
-    }
-  },
-  methods:{
-    mouseEnter(index){
-      this.currentIndex=index
+  props: {
+    comments: {
+      type: Array,
+      default() {
+        return [];
+      },
     },
-    mouseLeave(){
-      this.currentIndex=""
-    }
-  }
-}
+  },
+  methods: {
+    mouseEnter(index) {
+      this.currentIndex = index;
+    },
+    mouseLeave() {
+      this.currentIndex = "";
+    },
+    gotoProfile(item) {
+      this.$router.push("/profile/" + item.user.userId);
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -64,10 +80,11 @@ export default {
   border-radius: 50%;
 }
 .nickname {
+  cursor: pointer;
   color: #a5a5f3;
 }
 .text {
-  margin-bottom: 10px ;
+  margin-bottom: 10px;
   font-size: 12px;
 }
 .time {
@@ -78,5 +95,4 @@ export default {
   right: 0;
   bottom: 0;
 }
-
 </style>

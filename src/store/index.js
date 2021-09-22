@@ -26,6 +26,9 @@ const store = new Vuex.Store({
 
     },
     mutations: {
+        setMusicUrl(state, url) {
+            state.musicUrl = url
+        },
         setShowLogin(state, bool) {
             state.showLogin = bool
         },

@@ -18,6 +18,7 @@ export default {
       follows: [],
     };
   },
+  
   created() {
     this.getProfileDetail();
     this.getUserFollows();

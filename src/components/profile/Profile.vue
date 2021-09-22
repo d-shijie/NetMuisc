@@ -129,6 +129,7 @@ export default {
       getProfileDetail(this.$route.params.id)
         .then((res) => {
           const result = res.data.profile;
+          this.userInfo.activityCount = result.eventCount;
           this.userInfo.playlistCount = result.playlistCount;
           this.userInfo.avatarUrl = result.avatarUrl;
           this.userInfo.username = result.nickname;
@@ -151,7 +152,6 @@ export default {
     getUserPlayList() {
       getUserPlayList(this.$route.params.id)
         .then((res) => {
-          console.log(res);
           this.playList = res.data.playlist;
         })
         .catch((err) => {

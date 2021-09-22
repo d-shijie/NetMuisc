@@ -14,7 +14,7 @@
         <el-main>
           <keep-alive
             exclude="Search,Singer,Album,MV,MusicList,Profile,Dj,DjCategory,DailyReommend,VideoPlay,AllMV,TopicDetail,
-            Gender,Follow,Followed"
+            gender,Follow,Followed,a"
           >
             <router-view
               :is-show-play="isShowPlay"
