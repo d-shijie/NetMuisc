@@ -4,7 +4,7 @@
       <el-table-column type="index"></el-table-column>
       <el-table-column width="50px">
         <template slot-scope="scope">
-          <Like></Like>
+          <Like :slot-scope="scope.row.id"></Like>
         </template>
       </el-table-column>
       <el-table-column label="音乐标题" prop="name"></el-table-column>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Like from '../like/Like.vue'
+import Like from "../like/Like.vue";
 export default {
   props: {
     songs: {

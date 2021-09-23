@@ -58,13 +58,21 @@ export function getVideoInfo(vid) {
     })
 }
 //视频评论
-export function getVideoComment(id,limit,offset){
+export function getVideoComment(id, limit, offset) {
     return request({
-        url:'/comment/video',
-        params:{
+        url: '/comment/video',
+        params: {
             id,
             limit,
             offset
         }
+    })
+}
+// 评论点赞
+export function like(query) {
+    return request({
+        url: '/comment/like',
+        // method:'post',
+        params: query
     })
 }

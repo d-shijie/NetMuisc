@@ -26,16 +26,16 @@
         <a>举报</a>
       </div>
       <h4 class="title">评论{{ "(" + mvInfo.commentCount + ")" }}</h4>
-      <el-input :rows="3" type="textarea"> </el-input>
+      <el-input v-model="content" :rows="3" type="textarea"> </el-input>
       <div class="send">
         <span>@</span>
         <span>#</span>
-        <el-button class="send-btn" size="mini" round>发送</el-button>
+        <el-button @click="send" class="send-btn" size="mini" round>发送</el-button>
       </div>
       <h4 v-if="showHotComments">精彩评论</h4>
-      <Comment :comments="hotComments"></Comment>
+      <Comment @refresh="refresh" :comments="hotComments"></Comment>
       <h4>最新评论</h4>
-      <Comment :comments="comments"></Comment>
+      <Comment @refresh="refresh" :comments="comments"></Comment>
       <el-pagination
         :current-page="commentsOffset"
         small
@@ -73,6 +73,7 @@ import { getMVInfo } from "../../network/getMVData";
 import { getMVCount } from "../../network/getMVData";
 import { getMVComment } from "../../network/getMVData";
 import { getSimiMV, getVideoUrl } from "../../network/getMVData";
+import {sendComment} from '../../network/getProfileData'
 import Comment from "../comment/Comment";
 
 export default {
@@ -92,12 +93,13 @@ export default {
         subCount: 0,
         likedCount: 0,
         shareCount: 0,
-      },// mv信息
-      hotComments: [],//热门评论
-      comments: [],// 评论
-      commentsOffset: 0,//评论页数
-      commentsTotal: 0,// 评论总数
-      simiMVs: [],// 相识mv
+      }, // mv信息
+      hotComments: [], //热门评论
+      comments: [], // 评论
+      commentsOffset: 0, //评论页数
+      commentsTotal: 0, // 评论总数
+      simiMVs: [], // 相识mv
+      content:''
     };
   },
   computed: {
@@ -165,7 +167,7 @@ export default {
           console.log(err);
         });
     },
-    // 
+    //
     pageChange(page) {
       this.commentsOffset = page;
       this.getMVComment();
@@ -175,13 +177,12 @@ export default {
       getSimiMV(this.$route.params.id)
         .then((res) => {
           this.simiMVs = res.data.mvs;
-          
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    // 
+    //
     itemClick(item) {
       this.$router.push("/mv/" + item.id);
       this.getMVUrl();
@@ -189,6 +190,20 @@ export default {
       this.getMVCount();
       this.getMVComment();
       this.getSimiMV();
+    },
+    refresh() {
+      this.getMVComment();
+    },
+     // 发送评论
+    send() {
+      sendComment(1, 1, this.$route.params.id, this.content)
+        .then((res) => {
+          this.getMVComment();
+          this.content = "";
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   filters: {

@@ -46,16 +46,18 @@
         >
         <a>举报</a>
       </div>
-      <el-input :rows="3" type="textarea"> </el-input>
+      <el-input v-model="content" :rows="3" type="textarea"> </el-input>
       <div class="send">
         <span>@</span>
         <span>#</span>
-        <el-button class="send-btn" size="mini" round>发送</el-button>
+        <el-button @click="send" class="send-btn" size="mini" round
+          >发送</el-button
+        >
       </div>
       <h4>热门评论</h4>
-      <comment :comments="hotComments"></comment>
+      <comment @refresh="refresh" :comments="hotComments"></comment>
       <h4>最新评论</h4>
-      <comment :comments="comments"></comment>
+      <comment @refresh="refresh" :comments="comments"></comment>
       <el-pagination
         class="pagination"
         @current-change="pageChange"
@@ -82,7 +84,7 @@
 
 <script>
 import Comment from "../../components/comment/Comment.vue";
-
+import { sendComment } from "../../network/getProfileData.js";
 import {
   getVideoUrl,
   getVideoDetail,
@@ -104,6 +106,7 @@ export default {
       total: 0, //评论总数
       offset: 0, // 评论页数
       similarVideos: [], //相似视频
+      content: "", //发送的评论
     };
   },
   filters: {
@@ -186,6 +189,21 @@ export default {
       this.getVideoInfo(this.$route.params.id);
       this.getVideoComment();
       this.getSimilarVideos(this.$route.params.id);
+    },
+    // 点赞后刷新评论列表
+    refresh() {
+      this.getVideoComment();
+    },
+    // 发送评论
+    send() {
+      sendComment(1, 5, this.$route.params.id, this.content)
+        .then((res) => {
+          this.getVideoComment();
+          this.content = "";
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };

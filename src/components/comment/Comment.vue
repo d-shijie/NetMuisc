@@ -22,7 +22,20 @@
         <el-button v-if="currentIndex === index" round size="mini"
           >举报</el-button
         >
-        <el-button round size="mini" class="el-icon-thumb"></el-button>
+        <el-button
+          @click="like(item)"
+          v-if="item.liked === false"
+          round
+          size="mini"
+          class="el-icon-thumb"
+        ></el-button>
+        <el-button
+          @click="unlike(item)"
+          v-else
+          round
+          size="mini"
+          class="el-icon-star-on"
+        ></el-button>
         <el-button round size="mini" class="el-icon-position"></el-button>
         <el-button
           round
@@ -35,6 +48,7 @@
 </template>
 
 <script>
+import { like } from "../../network/getVideoData";
 export default {
   name: "Comment",
   data() {
@@ -59,6 +73,62 @@ export default {
     },
     gotoProfile(item) {
       this.$router.push("/profile/" + item.user.userId);
+    },
+    like(item) {
+      let query = {};
+      let regVideo = /^\/videoPlay.*/;
+      let regMV = /^\/mv.*/;
+      let regMusicList = /^\/musiclist.*/;
+      let regAlbum = /^\/album.*/;
+      query.id = this.$route.params.id;
+      query.cid = item.commentId;
+      query.t = 1;
+      if (regMV.test(this.$route.path) === true) {
+        query.type = 1;
+      } else if (regVideo.test(this.$route.path) === true) {
+        query.type = 5;
+      } else if (regMusicList.test(this.$route.path) === true) {
+        query.type = 2;
+      } else if (regAlbum.test(this.$route.path) === true) {
+        query.type = 3;
+      }
+      like(query)
+        .then((res) => {
+          console.log(query);
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.$emit("refresh");
+    },
+    unlike(item) {
+      let query = {};
+      let regVideo = /^\/videoPlay.*/;
+      let regMV = /^\/mv.*/;
+      let regMusicList = /^\/musiclist.*/;
+      let regAlbum = /^\/album.*/;
+      query.id = this.$route.params.id;
+      query.cid = item.commentId;
+      query.t = 0;
+      if (regMV.test(this.$route.path) === true) {
+        query.type = 1;
+      } else if (regVideo.test(this.$route.path) === true) {
+        query.type = 5;
+      } else if (regMusicList.test(this.$route.path) === true) {
+        query.type = 2;
+      } else if (regAlbum.test(this.$route.path) === true) {
+        query.type = 3;
+      }
+      like(query)
+        .then((res) => {
+          console.log(query);
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.$emit("refresh");
     },
   },
 };

@@ -33,8 +33,11 @@ export function getUserInfo(uid) {
 // 签到
 export function singIn() {
     return request({
-        url: '/yunbei/sign',
-        methods: 'post'
+        url: '/daily_signin',
+        methods: 'post',
+        data: {
+            type: 1
+        }
     })
 }
 //获取用户歌单
@@ -73,5 +76,22 @@ export function getUserFolloweds(uid) {
         params: {
             uid
         }
+    })
+}
+// 发送/回复评论
+export function sendComment(t, type, id, content, commentId) {
+    return request({
+        url: '/comment',
+        params: {
+            t, type, id, content, commentId
+        }
+    })
+}
+// 喜欢音乐
+export function likeMusic(query) {
+    return request({
+        url: '/like',
+        // methods: 'post',
+        params: query
     })
 }
