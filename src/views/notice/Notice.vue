@@ -1,6 +1,6 @@
 <template>
-  <div @click="close" class="notice" v-if="$store.state.showNotice">
-    <span class="el-icon-circle-close"></span>
+  <div class="notice" v-if="$store.state.showNotice">
+    <span @click.stop="close" class="el-icon-circle-close"></span>
     <h3>消息(评论，通知和@我本人账号数据为空所有没做)</h3>
     <div class="bar">
       <span

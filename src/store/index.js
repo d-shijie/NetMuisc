@@ -26,7 +26,8 @@ const store = new Vuex.Store({
         showMessage: false,
         sendUserId: 0,// 私信的用户id
         sendUserName: '',// 私信的用户名,
-        showNotice: false
+        showNotice: false,
+        qrurl:'',//二维码
     },
     mutations: {
         setMusicUrl(state, url) {
@@ -58,6 +59,9 @@ const store = new Vuex.Store({
         },
         setShowNotice(state, bool) {
             state.showNotice = bool
+        },
+        setQrUrl(state,url){
+            state.qrurl=url
         }
     },
     actions: {},

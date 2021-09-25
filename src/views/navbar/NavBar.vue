@@ -23,7 +23,10 @@
 
 <script>
 import { getSearchData } from "../../network/getSearchData";
-import { loginStatus } from "../../network/getProfileData";
+import {
+  loginStatus,
+  
+} from "../../network/getProfileData";
 export default {
   name: "NavBar",
   mounted() {
@@ -38,6 +41,7 @@ export default {
     return {
       keywords: "",
       headUrl: require("../../assets/img/navbar/头像.png"),
+      qrurl: "",
     };
   },
   methods: {
@@ -62,11 +66,14 @@ export default {
     back() {
       this.$router.back();
     },
+   
+
     headClick() {
       if (window.localStorage.getItem("userId")) {
         this.$store.commit("showLogout", true);
       } else {
-        this.$store.state.showLogin = true;
+        this.$store.commit("setShowLogin", true);
+        
       }
     },
   },

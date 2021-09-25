@@ -170,3 +170,19 @@ export function getNotice(limit, offset) {
         }
     })
 }
+// 生成二维码key
+export function getLoginKey() {
+    return request({
+        url: "/login/qr/key"
+    })
+}
+// 生成二维码
+export function getQrImg(key,qrimg) {
+    return request({
+        url: '/login/qr/create',
+        params: {
+            key,
+            qrimg
+        }
+    })
+}

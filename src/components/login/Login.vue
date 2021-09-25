@@ -2,8 +2,8 @@
   <div ref="login" v-drag v-if="$store.state.showLogin" class="login">
     <span @click="close" class="close">X</span>
     <div v-if="show" class="qr-login">
-      <h2>扫码登录</h2>
-      <div class="qr-code">二维码</div>
+      <h2 @click="getQR">扫码登录(点我获取二维码)</h2>
+      <div class="qr-code" ref="qrCodeUrl"></div>
       <p>使用<a href="javaScript:;">网易云音乐APP</a>扫码登录</p>
       <div class="other">
         <i @click="otherClick">选择其他登录方式></i>
@@ -60,9 +60,18 @@ import {
   getFindMusicPersonalizeMusicList,
   getDailyRecommend,
 } from "../../network/getFindMusicData";
-import { getUserInfo } from "../../network/getProfileData";
+import {
+  getUserInfo,
+  getLoginKey,
+  getQrImg,
+} from "../../network/getProfileData";
+import vueQr from "vue-qr";
+import QRCode from "qrcodejs2";
 export default {
   name: "Login",
+  components: {
+    vueQr,
+  },
   data() {
     return {
       show: true,
@@ -82,9 +91,47 @@ export default {
           { min: 6, max: 18, message: "请输入正确的密码", trigger: "blur" },
         ],
       },
+      qrurl: "",
     };
   },
+  mounted() {
+    this.getQR();
+  },
+  activated() {
+    setTimeout(() => {
+      console.log(1);
+    }, 1000);
+  },
   methods: {
+    getQR() {
+      this.getLoginKey();
+      this.creatQrCode();
+    },
+    getLoginKey() {
+      getLoginKey()
+        .then((res) => {
+          getQrImg(res.data.data.unikey)
+            .then((res) => {
+              this.qrurl = res.data.data.qrurl;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    creatQrCode() {
+      new QRCode(this.$refs.qrCodeUrl, {
+        text: this.qrurl, // 需要转换为二维码的内容
+        width: 200,
+        height: 200,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+    },
     close() {
       this.$store.state.showLogin = false;
     },
@@ -253,12 +300,12 @@ h2 {
   text-align: center;
 }
 .qr-code {
-  border: 1px solid #eeeeee;
-  width: 180px;
+  overflow: hidden;
+  width: 100%;
   text-align: center;
   line-height: 100px;
-  margin: 30px auto;
-  height: 180px;
+  margin: 30px 0 30px 80px;
+  height: 200px;
 }
 .login {
   height: 530px;
