@@ -105,19 +105,9 @@ export default {
             .then((res) => {
               window.localStorage.setItem("token", res.data.token);
               this.$bus.$emit("getHeadUrl", res.data.profile.avatarUrl);
-              window.sessionStorage.setItem("userId", res.data.account.id);
+              window.localStorage.setItem("userId", res.data.account.id);
               this.$store.state.showLogin = false;
               this.$store.commit("setShowFriend", true);
-              getDailyRecommend()
-                .then((res) => {
-                  this.$store.commit(
-                    "setDailyRecommend",
-                    res.data.data.dailySongs
-                  );
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
               getFindMusicPersonalizeMusicList()
                 .then((res) => {})
                 .catch((err) => {

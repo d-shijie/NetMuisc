@@ -95,3 +95,78 @@ export function likeMusic(query) {
         params: query
     })
 }
+// 登录状态
+export function loginStatus() {
+    return request({
+        url: '/login/status'
+    })
+}
+// 喜欢音乐列表
+export function getLikedList(uid) {
+    return request({
+        url: '/likelist',
+        params: {
+            uid
+        }
+    })
+}
+// 关注用户
+export function follow(id, t) {
+    return request({
+        url: "/follow",
+        params: {
+            id, t
+        }
+    })
+}
+// 发送私信
+export function sendMessage(user_ids, msg) {
+    return request({
+        url: '/send/text',
+        params: {
+            user_ids,
+            msg
+        }
+    })
+}
+// 获取通知私信
+export function getNoticePrivate(limit, offset) {
+    return request({
+        url: '/msg/private',
+        params: {
+            limit,
+            offset
+        }
+    })
+}
+// 获取通知评论
+export function getNoticeComments(uid, limit, offset) {
+    return request({
+        url: '/msg/comments',
+        params: {
+            uid,
+            limit,
+            offset
+        }
+    })
+}
+// 获取通知@我
+export function getNoticeForwards(limit, offset) {
+    return request({
+        url: '/msg/forwards',
+        params: {
+            limit,
+            offset
+        }
+    })
+}
+// 获取通知
+export function getNotice(limit, offset) {
+    return request({
+        url: '/msg/notices',
+        params: {
+            limit,
+            offset
+        }
+    })
+}

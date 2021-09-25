@@ -5,11 +5,11 @@
         <img class="banner" :src="item.imageUrl" alt="" />
       </el-carousel-item>
     </el-carousel>
-    <SmallTitle path='/findMusic/singers' :text="'推荐歌单'"></SmallTitle>
+    <SmallTitle path="/findMusic/singers" :text="'推荐歌单'"></SmallTitle>
     <div class="recommend-music-list">
       <div @click="goto" class="everyday-recommend">
         <img src="../../assets/img/login/音乐.png" alt="" />
-        <p>每日歌曲推荐 {{nowDay}}号</p>
+        <p>每日歌曲推荐 {{ nowDay }}号</p>
       </div>
       <div
         @mouseenter="mouseEnter(index)"
@@ -54,7 +54,7 @@
         <p>{{ item.name }}</p>
       </div>
     </div>
-    <SmallTitle path='/findMusic/searchlyric' :text="'最新音乐'"></SmallTitle>
+    <SmallTitle path="/findMusic/searchlyric" :text="'最新音乐'"></SmallTitle>
     <div class="new-music">
       <div class="new-music-item" v-for="(item, index) in newMusic">
         <div @click="newMusicItemClick(item)" class="new-music-item-img">
@@ -73,7 +73,7 @@
         </div>
       </div>
     </div>
-    <SmallTitle path='/video/singers' :text="'推荐MV'"></SmallTitle>
+    <SmallTitle path="/video/singers" :text="'推荐MV'"></SmallTitle>
     <div class="recommend-mv">
       <div
         @click="$router.push('/mv/' + item.id)"
@@ -85,7 +85,7 @@
         <p>{{ item.name }}</p>
       </div>
     </div>
-    <SmallTitle path='https://look.163.com/hot' :text="'主播电台'"></SmallTitle>
+    <SmallTitle path="https://look.163.com/hot" :text="'主播电台'"></SmallTitle>
     <div class="recommend-djs">
       <div
         @click="$router.push('/dj/' + item.id)"
@@ -107,6 +107,7 @@ import { getFindMusicUnique } from "../../network/getFindMusicData";
 import { getFindMusicNewMusic } from "../../network/getFindMusicData";
 import { getRecommendMV } from "../../network/getFindMusicData";
 import { getRecommendDjs } from "../../network/getFindMusicData";
+import { loginStatus } from "../../network/getProfileData";
 import SmallTitle from "./SmallTitle";
 import MVButton from "../../components/mv/MVButton";
 export default {
@@ -129,9 +130,9 @@ export default {
   },
   computed: {
     nowDay() {
-      let day=new Date()
-      let d=day.getDate()
-      return d
+      let day = new Date();
+      let d = day.getDate();
+      return d;
     },
   },
   created() {
@@ -222,13 +223,15 @@ export default {
         });
     },
     goto() {
-      if (window.sessionStorage.getItem("userId")) {
-        this.$router.push("/dailyRecommend");
-      } else {
-        this.$message.error({
-          message: "登陆后获取",
+      loginStatus()
+        .then((res) => {
+          this.$router.push("/dailyRecommend");
+        })
+        .catch((err) => {
+          this.$message.error({
+            message: "登陆后获取",
+          });
         });
-      }
     },
   },
 };

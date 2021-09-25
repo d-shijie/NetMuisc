@@ -61,3 +61,14 @@ export function getMusicUrl(id) {
         }
     })
 }
+// 收藏歌单
+export function subMusicList(query) {
+    return request({
+        url: "/playlist/subscribe",
+        method: 'post',
+        data: query
+        // params: {
+        //     t, id
+        // }
+    })
+}

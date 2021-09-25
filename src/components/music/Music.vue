@@ -4,7 +4,7 @@
       <el-table-column type="index"></el-table-column>
       <el-table-column width="50px">
         <template slot-scope="scope">
-          <Like :slot-scope="scope.row.id"></Like>
+          <Like :id="scope.row.id"></Like>
         </template>
       </el-table-column>
       <el-table-column label="音乐标题" prop="name"></el-table-column>
@@ -36,6 +36,9 @@ export default {
   },
   data() {
     return {};
+  },
+  components: {
+    Like,
   },
   created() {},
   methods: {

@@ -22,8 +22,11 @@ const store = new Vuex.Store({
         showLogout: false,
         dailyRecommend: [],
         userInfo: {},
-        showFriend: false
-
+        showFriend: false,
+        showMessage: false,
+        sendUserId: 0,// 私信的用户id
+        sendUserName: '',// 私信的用户名,
+        showNotice: false
     },
     mutations: {
         setMusicUrl(state, url) {
@@ -43,6 +46,18 @@ const store = new Vuex.Store({
         },
         setShowFriend(state, bool) {
             state.showFriend = bool
+        },
+        setShowMessage(state, bool) {
+            state.showMessage = bool
+        },
+        setSendUserId(state, id) {
+            state.sendUserId = id
+        },
+        setSendUsername(state, name) {
+            state.sendUserName = name
+        },
+        setShowNotice(state, bool) {
+            state.showNotice = bool
         }
     },
     actions: {},

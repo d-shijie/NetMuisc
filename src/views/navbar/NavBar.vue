@@ -23,7 +23,7 @@
 
 <script>
 import { getSearchData } from "../../network/getSearchData";
-
+import { loginStatus } from "../../network/getProfileData";
 export default {
   name: "NavBar",
   mounted() {
@@ -63,7 +63,7 @@ export default {
       this.$router.back();
     },
     headClick() {
-      if (window.sessionStorage.getItem("userId")) {
+      if (window.localStorage.getItem("userId")) {
         this.$store.commit("showLogout", true);
       } else {
         this.$store.state.showLogin = true;

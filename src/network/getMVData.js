@@ -1,6 +1,6 @@
 import { request } from "./request";
 //所有MV
-export function getAllMv(area,type, order, limit,offset,) {
+export function getAllMv(area, type, order, limit, offset,) {
     return request({
         url: "/mv/all",
         params: {
@@ -69,5 +69,14 @@ export function getMVBank(limit, area, offset) {
             area,
             offset
         }
+    })
+}
+// 收藏MV
+export function subMV(query) {
+    return request({
+        url: '/mv/sub',
+        // method:'post',
+        // data:query
+        params: query
     })
 }

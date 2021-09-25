@@ -37,7 +37,11 @@
           >赞({{ videoInfo.likedCount }})</el-button
         >
 
-        <el-button class="el-icon-folder-add" size="medium" round
+        <el-button
+          @click="subVideo"
+          class="el-icon-folder-add"
+          size="medium"
+          round
           >收藏</el-button
         >
 
@@ -91,6 +95,7 @@ import {
   getSimilarVideos,
   getVideoInfo,
   getVideoComment,
+  subVideo,
 } from "../../network/getVideoData";
 export default {
   components: { Comment },
@@ -203,6 +208,23 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+        });
+    },
+    //收藏视频
+    subVideo() {
+      let query = {};
+      query.t = 1;
+      query.id = this.$route.params.id;
+      subVideo(query)
+        .then((res) => {
+          this.$message.success({
+            message: "收藏成功",
+          });
+        })
+        .catch((err) => {
+          this.$message.error({
+            message: "已收藏",
+          });
         });
     },
   },

@@ -2,6 +2,8 @@
   <div id="app">
     <Login class="login"></Login>
     <logout class="logout"></logout>
+    <massage></massage>
+    <notice></notice>
     <el-container>
       <el-header>
         <nav-bar @getKeywords="getKeywords"></nav-bar>
@@ -50,6 +52,9 @@ import TabBar from "./components/tabbar/TabBar";
 import Login from "./components/login/Login";
 import Logout from "./components/logout/Logout.vue";
 import MyMusic from "./components/myMusic/MyMusic.vue";
+import Massage from "./views/message/Massge.vue";
+import Notice from "./views/notice/Notice.vue";
+import { loginStatus, getProfileDetail } from "./network/getProfileData";
 
 export default {
   name: "App",
@@ -76,7 +81,22 @@ export default {
     },
   },
   created() {
-    window.sessionStorage.clear();
+    // 因为不手动退出后台一直登录处于登录状态 做一些对应处理
+    loginStatus()
+      .then((res) => {
+        getProfileDetail(window.localStorage.getItem("userId"))
+          .then((res) => {
+            this.$store.commit("setUserInfo", res.data);
+
+            this.$bus.$emit("getHeadUrl", res.data.profile.avatarUrl);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        window.localStorage.clear();
+      });
   },
   components: {
     NavBar,
@@ -84,7 +104,10 @@ export default {
     Login,
     Logout,
     MyMusic,
+    Massage,
+    Notice,
   },
+
   methods: {
     // 发送auido当前时间
     timeUpdate(time) {
@@ -147,6 +170,7 @@ export default {
   background-color: #f2f2f2;
   position: absolute;
   bottom: 0;
+  z-index: 100;
   width: 100%;
 }
 .login,

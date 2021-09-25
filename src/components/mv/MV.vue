@@ -13,12 +13,22 @@
         <span>播放次数:{{ mvInfo.playCount }}</span>
       </div>
       <div class="btns">
-        <el-button class="el-icon-thumb" size="medium" round
+        <el-button
+          v-if="mvInfo.subed === false"
+          class="el-icon-thumb"
+          size="medium"
+          round
           >赞{{ "(" + mvInfo.likedCount + ")" }}</el-button
         >
-        <el-button class="el-icon-folder-add" size="medium" round
+        <el-button
+          v-else
+          @click="subMV"
+          class="el-icon-folder-add"
+          size="medium"
+          round
           >收藏{{ "(" + mvInfo.subCount + ")" }}</el-button
         >
+        <el-button @click="unSubMV" size="medium" round>取消收藏</el-button>
         <el-button class="el-icon-s-promotion" size="medium" round
           >分享{{ "(" + mvInfo.shareCount + ")" }}</el-button
         >
@@ -30,7 +40,9 @@
       <div class="send">
         <span>@</span>
         <span>#</span>
-        <el-button @click="send" class="send-btn" size="mini" round>发送</el-button>
+        <el-button @click="send" class="send-btn" size="mini" round
+          >发送</el-button
+        >
       </div>
       <h4 v-if="showHotComments">精彩评论</h4>
       <Comment @refresh="refresh" :comments="hotComments"></Comment>
@@ -68,12 +80,12 @@
 </template>
 
 <script>
-import { getMVUrl } from "../../network/getMVData";
+import { getMVUrl, subMV } from "../../network/getMVData";
 import { getMVInfo } from "../../network/getMVData";
 import { getMVCount } from "../../network/getMVData";
 import { getMVComment } from "../../network/getMVData";
 import { getSimiMV, getVideoUrl } from "../../network/getMVData";
-import {sendComment} from '../../network/getProfileData'
+import { sendComment } from "../../network/getProfileData";
 import Comment from "../comment/Comment";
 
 export default {
@@ -99,7 +111,7 @@ export default {
       commentsOffset: 0, //评论页数
       commentsTotal: 0, // 评论总数
       simiMVs: [], // 相识mv
-      content:''
+      content: "",
     };
   },
   computed: {
@@ -138,6 +150,7 @@ export default {
           this.mvInfo.publishTime = res.data.data.publishTime;
           this.mvInfo.name = res.data.data.name;
           this.mvInfo.subCount = res.data.data.subCount;
+          this.mvInfo.subed = res.data.subed;
         })
         .catch((err) => {
           console.log(err);
@@ -194,12 +207,44 @@ export default {
     refresh() {
       this.getMVComment();
     },
-     // 发送评论
+    // 发送评论
     send() {
       sendComment(1, 1, this.$route.params.id, this.content)
         .then((res) => {
           this.getMVComment();
           this.content = "";
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // 收藏MV
+    subMV() {
+      let query = {};
+      query.t = 1;
+      query.mvid = this.$route.params.id;
+      subMV(query)
+        .then((res) => {
+          this.$message.success({
+            message: "收藏成功",
+          });
+          this.getMVInfo();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //取消收藏
+    unSubMV() {
+      let query = {};
+      query.t = 2;
+      query.mvid = this.$route.params.id;
+      subMV(query)
+        .then((res) => {
+          this.$message.success({
+            message: "取消收藏成功",
+          });
+          this.getMVInfo();
         })
         .catch((err) => {
           console.log(err);

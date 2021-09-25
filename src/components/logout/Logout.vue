@@ -83,7 +83,7 @@ export default {
     logout() {
       logout()
         .then((res) => {
-          window.sessionStorage.clear();
+          window.localStorage.clear();
           this.$bus.$emit("clearAvatarUrl");
           this.$store.commit("setUserInfo", {});
           this.$store.commit("setShowFriend", false);
@@ -106,10 +106,10 @@ export default {
         });
     },
     gotoProfile() {
-      this.$router.push("/profile/" + window.sessionStorage.getItem("userId"));
+      this.$router.push("/profile/" + window.localStorage.getItem("userId"));
     },
     goto(path) {
-      let id = window.sessionStorage.getItem("userId");
+      let id = window.localStorage.getItem("userId");
       this.$router.push(path + id);
     },
   },

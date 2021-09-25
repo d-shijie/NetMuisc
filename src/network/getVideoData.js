@@ -76,3 +76,10 @@ export function like(query) {
         params: query
     })
 }
+// 收藏视频
+export function subVideo(query){
+    return request({
+        url:'/video/sub',
+        params:query
+    })
+}

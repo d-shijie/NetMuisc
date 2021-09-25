@@ -8,7 +8,7 @@ module.exports = {
         open: true,
         proxy: {
             '/api': {
-                target: 'https://nicemusic-api.lxhcool.cn/',
+                target: 'http://localhost:3000',
                 // 允许跨域
                 changeOrigin: true,
                 ws: true,

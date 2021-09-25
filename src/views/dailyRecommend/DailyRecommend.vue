@@ -10,11 +10,13 @@
 
 <script>
 import Music from "../../components/music/Music.vue";
-
+import PlayList from '../../components/musicList/PlayList.vue';
+import { getDailyRecommend } from "../../network/getFindMusicData";
 export default {
   name: "DailyReommend",
   components: { Music },
   data() {
+    PlayList
     return {
       songs: [],
     };
@@ -27,7 +29,15 @@ export default {
     },
   },
   created() {
-    this.songs = this.$store.state.dailyRecommend;
+    getDailyRecommend()
+      .then((res) => {
+        this.songs = res.data.data.dailySongs;
+      })
+      .catch((err) => {
+        this.$message.error({
+          message: "未登录",
+        });
+      });
   },
   methods: {},
 };

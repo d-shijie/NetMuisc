@@ -19,10 +19,24 @@
             ></span>
           </div>
           <div class="btns">
-            <el-button class="el-icon-message" size="medium" round
+            <el-button
+              @click="showMessage"
+              class="el-icon-message"
+              size="medium"
+              round
               >发私信</el-button
             >
-            <el-button class="el-icon-plus" size="medium" round>关注</el-button>
+            <el-button
+              v-if="userInfo.followTime === null"
+              @click.stop="follow"
+              class="el-icon-plus"
+              size="medium"
+              round
+              >关注</el-button
+            >
+            <el-button v-else @click.stop="unfollow" size="medium" round
+              >取消关注</el-button
+            >
             <el-dropdown trigger="click">
               <span class="el-dropdown-link">
                 <el-button class="other" size="medium" circle>...</el-button>
@@ -103,6 +117,7 @@ import {
   getUserAccount,
   getUserSubcount,
   getUserPlayList,
+  follow,
 } from "../../network/getProfileData";
 
 export default {
@@ -128,6 +143,7 @@ export default {
     getProfileDetail() {
       getProfileDetail(this.$route.params.id)
         .then((res) => {
+    
           const result = res.data.profile;
           this.userInfo.activityCount = result.eventCount;
           this.userInfo.playlistCount = result.playlistCount;
@@ -143,6 +159,8 @@ export default {
           this.userInfo.desc = result.signature;
           this.userInfo.createTime = result.createTime;
           this.userInfo.city = result.city;
+          this.userInfo.followTime = result.followTime;
+          this.userInfo.userId = result.userId;
         })
         .catch((err) => {
           console.log(err);
@@ -164,24 +182,41 @@ export default {
     goto(path) {
       this.$router.push(path + this.$route.params.id);
     },
-    // getUserAccount() {
-    //   getUserAccount()
-    //     .then((res) => {
-    //       // console.log(res);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
-    // getUserSubcount() {
-    //   getUserSubcount()
-    //     .then((res) => {
-    //       console.log(res);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
+    // 关注用户
+    follow() {
+      follow(this.$route.params.id, 1)
+        .then((res) => {
+          if (res.data.code === 400) {
+            this.$message.error({
+              message: res.data.msg,
+            });
+          }
+          this.getProfileDetail();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // 取消关注
+    unfollow() {
+      follow(this.$route.params.id, 2)
+        .then((res) => {
+          if (res.data.code === 400) {
+            this.$message.error({
+              message: res.data.msg,
+            });
+          }
+          this.getProfileDetail();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    showMessage() {
+      this.$store.commit("setShowMessage", true);
+      this.$store.commit("setSendUserId", this.userInfo.userId);
+      this.$store.commit("setSendUsername", this.userInfo.username);
+    },
   },
   filters: {
     descFilter(value) {

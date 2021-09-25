@@ -20,11 +20,19 @@
             round
             >播放全部</el-button
           >
-          <el-button size="medium" class="el-icon-folder-add" round
+          <el-button
+            v-if="musicListDetail.subscribed === false"
+            @click="subList"
+            size="medium"
+            class="el-icon-folder-add"
+            round
             >收藏{{ "(" + subCount + ")" }}</el-button
           >
+          <el-button v-else @click="unSubList" size="medium" round
+            >取消收藏</el-button
+          >
           <el-button size="medium" class="el-icon-position" round
-            >分享{{ "(" + musicListDetail.shareCount + ")" }}</el-button
+            >分享({{ musicListDetail.shareCount | countFilter }})</el-button
           >
           <el-button size="medium" class="el-icon-download" round
             >VIP下载</el-button
@@ -44,7 +52,10 @@
 </template>
 
 <script>
-import { getMusicListDetail } from "../../network/getMusicListData";
+import {
+  getMusicListDetail,
+  subMusicList,
+} from "../../network/getMusicListData";
 import Title from "../title/Title";
 export default {
   name: "MusicList",
@@ -86,10 +97,10 @@ export default {
     this.getMusicListDetail();
   },
   methods: {
+    //获取歌单详情
     getMusicListDetail() {
       getMusicListDetail(this.$route.params.id)
         .then((res) => {
-          console.log(res);
           const result = res.data.playlist;
           this.musicListDetail.imgUrl = result.coverImgUrl;
           this.musicListDetail.commentCount = result.commentCount;
@@ -103,9 +114,49 @@ export default {
           this.musicListDetail.musicListName = result.name;
           this.musicListDetail.creatorUrl = result.creator.avatarUrl;
           this.musicListDetail.desc = result.description;
+          this.musicListDetail.subscribed = result.subscribed;
         })
         .catch((err) => {
           console.log(err);
+        });
+    },
+    //收藏歌单
+    subList() {
+      let query = {
+        t: 1,
+        id: this.$route.params.id,
+      };
+      subMusicList(query)
+        .then((res) => {
+          this.$message.success({
+            message: "收藏成功",
+          });
+          this.getMusicListDetail();
+        })
+        .catch((err) => {
+          this.$message.error({
+            message: "歌单已收藏",
+          });
+        });
+    },
+    //取消收藏
+    unSubList() {
+      let query = {
+        t: 2,
+        id: this.$route.params.id,
+      };
+      subMusicList(query)
+        .then((res) => {
+          console.log(res);
+          this.$message.success({
+            message: "取消收藏成功",
+          });
+          this.getMusicListDetail();
+        })
+        .catch((err) => {
+          this.$message.error({
+            message: err,
+          });
         });
     },
   },
