@@ -3,7 +3,7 @@
     <div class="top-count">
       <span @click="goto('/gender/')" class="activity">
         <div class="count">
-          {{ this.$store.state.userInfo.profile.gender }}
+          {{ this.$store.state.userInfo.profile.eventCount }}
         </div>
         <div class="text">动态</div>
       </span>
@@ -41,7 +41,7 @@
       <div slot="center">商城</div>
       <div class="el-icon-arrow-right" slot="right"></div>
     </logout-item>
-    <logout-item :border="true">
+    <logout-item :path="'/setUserInfo/' + userId" :border="true">
       <div class="el-icon-s-custom" slot="left"></div>
       <div slot="center">个人信息设置</div>
       <div class="el-icon-arrow-right" slot="right"></div>
@@ -75,6 +75,11 @@ export default {
     };
   },
   created() {},
+  computed: {
+    userId() {
+      return window.localStorage.getItem("userId");
+    },
+  },
   methods: {
     close() {
       this.$store.commit("showLogout", false);

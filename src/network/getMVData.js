@@ -80,3 +80,9 @@ export function subMV(query) {
         params: query
     })
 }
+// 收藏的MV
+export function getSublistMV() {
+    return request({
+        url: "/mv/sublist"
+    })
+}

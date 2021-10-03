@@ -42,3 +42,9 @@ export function subAlbum(query) {
         data: query
     })
 }
+// 已收藏专辑
+export function getSublistAlbum() {
+    return request({
+        url: '/album/sublist'
+    })
+}

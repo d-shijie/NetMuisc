@@ -1,6 +1,13 @@
 <template>
   <div class="music">
-    <el-table @row-click="rowClick" size="mini" :data="songs" stripe>
+    <alert :x="x" :y="y" ref="alert" class="alert" :songId="songId"></alert>
+    <el-table
+      @row-contextmenu="rightClick"
+      @row-click="rowClick"
+      size="mini"
+      :data="songs"
+      stripe
+    >
       <el-table-column type="index"></el-table-column>
       <el-table-column width="50px">
         <template slot-scope="scope">
@@ -24,6 +31,7 @@
 </template>
 
 <script>
+import Alert from "../alert/Alert.vue";
 import Like from "../like/Like.vue";
 export default {
   props: {
@@ -35,10 +43,16 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      
+      x: "",
+      y: "",
+      songId: 0,
+    };
   },
   components: {
     Like,
+    Alert,
   },
   created() {},
   methods: {
@@ -46,6 +60,15 @@ export default {
       this.$http.get("/song/url", { params: { id: row.id } }).then((res) => {
         this.$store.state.musicUrl = res.data.data[0].url;
       });
+    },
+    // 鼠标右键点击 让alert出现在标准位置需双击
+    rightClick(row, colum, event) {
+      event.preventDefault();
+      this.x = event.pageX + "px";
+      this.y = event.pageY - 30 + "px";
+      this.songId = row.id;
+      this.$store.commit("setShowAlert", true);
+      this.$refs.alert.setLocation();
     },
   },
 };

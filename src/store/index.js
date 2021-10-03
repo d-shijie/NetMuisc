@@ -28,6 +28,7 @@ const store = new Vuex.Store({
         sendUserName: '',// 私信的用户名,
         showNotice: false,
         qrurl:'',//二维码
+        showAlert:false,//是否显示鼠标右键弹出框
     },
     mutations: {
         setMusicUrl(state, url) {
@@ -62,6 +63,9 @@ const store = new Vuex.Store({
         },
         setQrUrl(state,url){
             state.qrurl=url
+        },
+        setShowAlert(state,bool){
+            state.showAlert=bool
         }
     },
     actions: {},

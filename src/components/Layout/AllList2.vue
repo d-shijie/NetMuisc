@@ -32,10 +32,10 @@ export default {
   },
   methods: {
     itemClick(item) {
-      if (item.id) {
+      if (item.id && item.id.length < 10) {
         this.$router.push("/mv/" + item.id);
       } else if (item.vid) {
-        this.$router.push("/mv/" + item.vid);
+        this.$router.push("/videoPlay/" + item.vid);
       }
     },
   },

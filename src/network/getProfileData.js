@@ -186,3 +186,36 @@ export function getQrImg(key,qrimg) {
         }
     })
 }
+// 验证二维码登录
+export function qrCheck(key){
+    return request({
+        url:'/login/qr/check',
+        params:{
+            key
+        }
+    })
+}
+// 获取用户播放记录
+export function getUserRecord(uid,type){
+    return request({
+        url:'/user/record',
+        params:{
+            uid,
+            type
+        }
+    })
+}
+// 获取国家编码
+export function getCountryCode(){
+    return request({
+        url:'/countries/code/list'
+    })
+}
+// 修改用户信息
+export function changeUserInfo(query){
+    return request({
+        url:'/user/update',
+        method:'post',
+        data:query
+    })
+}

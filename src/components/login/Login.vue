@@ -64,6 +64,7 @@ import {
   getUserInfo,
   getLoginKey,
   getQrImg,
+  qrCheck,
 } from "../../network/getProfileData";
 import vueQr from "vue-qr";
 import QRCode from "qrcodejs2";
@@ -80,7 +81,7 @@ export default {
       loginRuleForm: {
         phone: "13658229170",
         password: "asd85134477",
-      },
+      }, // 账号密码
       loginRules: {
         phone: [
           { required: true, message: "请输入手机号", trigger: "blur" },
@@ -91,28 +92,32 @@ export default {
           { min: 6, max: 18, message: "请输入正确的密码", trigger: "blur" },
         ],
       },
-      qrurl: "",
+      qrurl: "", // 二维码地址
+      unikey: "", // 二维码key
     };
   },
   mounted() {
     this.getQR();
   },
-  activated() {
-    setTimeout(() => {
-      console.log(1);
-    }, 1000);
-  },
+  activated() {},
   methods: {
     getQR() {
       this.getLoginKey();
       this.creatQrCode();
     },
+    // 获取二维码key以及url
     getLoginKey() {
       getLoginKey()
         .then((res) => {
+          this.unikey = res.data.data.unikey;
           getQrImg(res.data.data.unikey)
             .then((res) => {
               this.qrurl = res.data.data.qrurl;
+              qrCheck(this.unikey)
+                .then((res) => {})
+                .catch((err) => {
+                  console.log(err);
+                });
             })
             .catch((err) => {
               console.log(err);
@@ -122,6 +127,7 @@ export default {
           console.log(err);
         });
     },
+    // 创建二维码图片
     creatQrCode() {
       new QRCode(this.$refs.qrCodeUrl, {
         text: this.qrurl, // 需要转换为二维码的内容

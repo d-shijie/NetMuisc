@@ -45,3 +45,9 @@ export function getSingerList(limit,offset,type,area,initial){
         }
     })
 }
+//收藏的歌手
+export function getSublistSingers(){
+    return request({
+        url:'/artist/sublist'
+    })
+}

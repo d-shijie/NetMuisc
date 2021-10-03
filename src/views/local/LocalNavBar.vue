@@ -1,23 +1,20 @@
 <template>
-  <div class="my-music">
-    <header>我的音乐</header>
-    <ul>
-      <li
-        :class="{ active: show(index) }"
-        @click="itemClick(index)"
-        v-for="(item, index) in myMusics"
-        :key="index"
-      >
-        {{ item }}
-      </li>
-    </ul>
+  <div class="local-navbar">
+    <span
+      @click="itemClick(index)"
+      :class="{ active: show(index) }"
+      v-for="(item, index) in items"
+      :key="index"
+    >
+      {{ item }}
+    </span>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    myMusics: {
+    items: {
       type: Array,
       default() {
         return [];
@@ -30,7 +27,10 @@ export default {
       },
     },
   },
-  filters: {},
+  data() {
+    return {};
+  },
+  created() {},
   computed: {
     show() {
       return function (index) {
@@ -42,12 +42,6 @@ export default {
       };
     },
   },
-  data() {
-    return {
-      currentIndex: 0,
-    };
-  },
-  created() {},
   methods: {
     itemClick(index) {
       this.$router.push(this.path[index]);
@@ -55,26 +49,21 @@ export default {
   },
 };
 </script>
-<style scoped >
+<style scoped>
 /* @import url(); 引入css类 */
-.my-music {
-  padding: 5px 12px;
-}
-header {
-  font-size: 12px;
-  padding: 5px 0;
-  color: rgb(70, 70, 70);
-}
-li {
-  cursor: pointer;
+span {
   font-size: 16px;
-  padding: 10px 3px;
+  cursor: pointer;
+  color: rgb(59, 59, 59);
+  margin-right: 15px;
 }
-li:hover {
-  background-color: #f2f2f2;
+span:hover {
+  color: #000;
 }
 .active {
-  background-color: #f2f2f2;
   font-weight: 600;
+  font-size: 18px;
+  border-bottom: 3px solid rgb(255, 75, 75);
+  padding-bottom: 5px;
 }
 </style>

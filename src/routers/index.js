@@ -55,10 +55,16 @@ const DjRank = () => import("../views/findMusic/DjRank")
 const DjCategory = () => import("../views/findMusic/DjCategory")
 const DailyRecommend = () => import('../views/dailyRecommend/DailyRecommend.vue')
 const Local = () => import('../views/local/Local.vue')
+const DownloadManage = () => import('../views/local/DownloadManage.vue')
+const LocalMusic = () => import('../views/local/LocalMusic.vue')
 const Recent = () => import('../views/recent/Recent.vue')
 const Cloud = () => import('../views/cloud/Cloud.vue')
 const Client = () => import('../views/client/Client.vue')
 const Collect = () => import('../views/collect/Collect.vue')
+const CollectAlbums = () => import('../views/collect/CollectAlbums.vue')
+const CollectSingers = () => import('../views/collect/CollectSingers.vue')
+const CollectVideos = () => import('../views/collect/CollectVideos.vue')
+const CollectSpecials = () => import('../views/collect/CollectSpecials.vue')
 const VideoPlay = () => import('../views/video/VideoPlay.vue')
 const AllMV = () => import('../views/allMV/AllMV.vue')
 const MVRank = () => import('../components/mv/MVRank.vue')
@@ -67,6 +73,7 @@ const Topic = () => import('../views/friend/Topic.vue')
 const Gender = () => import('../views/gender/Gender.vue')
 const Follow = () => import('../views/follow/Follow.vue')
 const Followed = () => import('../views/follow/Followed.vue')
+const SetUserInfo = () => import('../views/setUserInfo/SetUserInfo.vue')
 const routes = [
     {
         redirect: "/findMusic",
@@ -288,7 +295,21 @@ const routes = [
     },
     {
         path: "/local",
-        component: Local
+        component: Local,
+        children: [
+            {
+                redirect: 'downloadManage',
+                path: ''
+            },
+            {
+                path: 'downloadManage',
+                component: DownloadManage
+            },
+            {
+                path: 'localMusic',
+                component: LocalMusic
+            }
+        ]
     },
     {
         path: '/recent',
@@ -304,7 +325,29 @@ const routes = [
     },
     {
         path: '/collect',
-        component: Collect
+        component: Collect,
+        children: [{
+            redirect: 'collectAlbums',
+            path: ''
+        },
+        {
+            path: 'collectAlbums',
+            component: CollectAlbums
+        },
+        {
+            path: 'collectSingers',
+            component: CollectSingers
+        },
+        {
+            path: "collectVideos",
+            component: CollectVideos
+        },
+        {
+            path: "collectSpecials",
+            component: CollectSpecials
+        },
+
+        ]
     },
     {
         path: '/videoPlay/:id',
@@ -337,6 +380,10 @@ const routes = [
     {
         path: "/followed/:id",
         component: Followed
+    },
+    {
+        path: '/setUserInfo/:userId',
+        component: SetUserInfo
     }
 ];
 const router = new VueRouter({
