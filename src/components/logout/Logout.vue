@@ -92,6 +92,7 @@ export default {
           this.$bus.$emit("clearAvatarUrl");
           this.$store.commit("setUserInfo", {});
           this.$store.commit("setShowFriend", false);
+          window.location.reload();
         })
         .catch((err) => {
           console.log(err);
@@ -101,7 +102,9 @@ export default {
     signIn() {
       singIn()
         .then((res) => {
-          console.log(res);
+          this.$message.success({
+            message: "签到成功",
+          });
         })
         .catch((err) => {
           console.log(err);

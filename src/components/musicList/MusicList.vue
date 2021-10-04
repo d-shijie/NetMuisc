@@ -47,7 +47,9 @@
       </div>
     </div>
     <Title :title-data="titleData"></Title>
-    <router-view></router-view>
+    <keep-alive exclude="PlayList,MusicListComment,MusicListSubers">
+      <router-view :key="$route.fullPath"> </router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -88,12 +90,23 @@ export default {
         : this.musicListDetail.subCount;
     },
     desc() {
-      return this.musicListDetail.desc.length > 50
-        ? "太多了......"
-        : this.musicListDetail.desc;
+      if (
+        this.musicListDetail.desc === null ||
+        this.musicListDetail.desc === ""
+      ) {
+        return "用户太懒了 没有简介";
+      } else if (this.musicListDetail.desc.length > 50) {
+        return "太多了......";
+      } else {
+        return this.musicListDetail.desc;
+      }
     },
   },
-  created() {
+
+  activated() {
+    this.getMusicListDetail();
+  },
+  mounted() {
     this.getMusicListDetail();
   },
   methods: {
@@ -101,6 +114,7 @@ export default {
     getMusicListDetail() {
       getMusicListDetail(this.$route.params.id)
         .then((res) => {
+          console.log(res);
           const result = res.data.playlist;
           this.musicListDetail.imgUrl = result.coverImgUrl;
           this.musicListDetail.commentCount = result.commentCount;

@@ -27,8 +27,10 @@ const store = new Vuex.Store({
         sendUserId: 0,// 私信的用户id
         sendUserName: '',// 私信的用户名,
         showNotice: false,
-        qrurl:'',//二维码
-        showAlert:false,//是否显示鼠标右键弹出框
+        qrurl: '',//二维码
+        showAlert: false,//是否显示鼠标右键弹出框,
+        userCreatedPlayList: [],//用户创建的歌单
+        userSublistPlaylist: [],//用户收藏的歌单
     },
     mutations: {
         setMusicUrl(state, url) {
@@ -61,11 +63,17 @@ const store = new Vuex.Store({
         setShowNotice(state, bool) {
             state.showNotice = bool
         },
-        setQrUrl(state,url){
-            state.qrurl=url
+        setQrUrl(state, url) {
+            state.qrurl = url
         },
-        setShowAlert(state,bool){
-            state.showAlert=bool
+        setShowAlert(state, bool) {
+            state.showAlert = bool
+        },
+        setCreatedPlayList(state, playlist) {
+            state.userCreatedPlayList = playlist
+        },
+        setSublistPlayList(state, playlist) {
+            state.userSublistPlaylist = playlist
         }
     },
     actions: {},

@@ -72,7 +72,7 @@ export default {
     // 鼠标右键点击 让alert出现在标准位置需双击
     rightClick(row, colum, event) {
       event.preventDefault();
-      this.x = event.pageX + "px";
+      this.x = event.pageX - 230 + "px";
       this.y = event.pageY - 30 + "px";
       this.songId = row.id;
       this.$store.commit("setShowAlert", true);

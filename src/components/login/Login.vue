@@ -65,6 +65,7 @@ import {
   getLoginKey,
   getQrImg,
   qrCheck,
+  getUserPlayList,
 } from "../../network/getProfileData";
 import vueQr from "vue-qr";
 import QRCode from "qrcodejs2";
@@ -147,6 +148,7 @@ export default {
     shift() {
       this.show = true;
     },
+    // 手机号登录
     login() {
       this.$refs.loginRuleForm.validate((valid) => {
         if (valid === false) {
@@ -173,6 +175,24 @@ export default {
                 .catch((err) => {
                   console.log(err);
                 });
+              getUserPlayList(res.data.account.id)
+                .then((res) => {
+                  let createdPlaylist = res.data.playlist.filter((item) => {
+                    return item.subscribed == false;
+                  });
+                  this.$store.commit("setCreatedPlayList", createdPlaylist);
+                  let sublistPlaylist = [];
+                  res.data.playlist.forEach((item) => {
+                    if (!createdPlaylist.includes(item)) {
+                      sublistPlaylist.push(item);
+                    }
+                  });
+                  this.$store.commit("setSublistPlayList", sublistPlaylist);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+              window.location.reload();
             })
             .catch((err) => {
               console.log(err);

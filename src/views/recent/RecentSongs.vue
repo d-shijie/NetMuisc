@@ -1,6 +1,13 @@
 <template>
   <div class="recent-songs">
-    <el-table @row-click="rowClick" size="mini" :data="songs" stripe>
+    <alert :x="x" :y="y" ref="alert" class="alert" :songId="songId"></alert>
+    <el-table
+      @row-contextmenu="rightClick"
+      @row-click="rowClick"
+      size="mini"
+      :data="songs"
+      stripe
+    >
       <el-table-column type="index"></el-table-column>
       <el-table-column label="音乐标题" prop="name">
         <template slot-scope="scope">
@@ -23,6 +30,7 @@
 
 <script>
 import { getMusicUrl } from "../../network/getMusicListData";
+import Alert from "../../components/alert/Alert.vue";
 export default {
   props: {
     songs: {
@@ -32,8 +40,16 @@ export default {
       },
     },
   },
+  components: {
+    Alert,
+  },
   data() {
-    return {};
+    return {
+      songs: [],
+      x: "",
+      y: "",
+      songId: 0,
+    };
   },
   created() {},
   methods: {
@@ -45,6 +61,16 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    // 鼠标右键点击 让alert出现在标准位置需双击
+    rightClick(row, colum, event) {
+      event.preventDefault();
+      this.x = event.pageX - 230 + "px";
+      this.y = event.pageY - 30 + "px";
+      this.songId = row.song.id;
+
+      this.$store.commit("setShowAlert", true);
+      this.$refs.alert.setLocation();
     },
   },
 };

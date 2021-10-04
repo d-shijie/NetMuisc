@@ -12,6 +12,48 @@
         <el-aside width="200px">
           <tab-bar :choices="choices"></tab-bar>
           <my-music :path="path" :myMusics="myMusics"></my-music>
+          <el-menu
+            v-if="show"
+            :unique-opened="true"
+            :collapse-transition="false"
+            active-text-color="red"
+          >
+            <el-submenu :index="''">
+              <template slot="title">
+                <span class="title-aside">创建的歌单</span>
+              </template>
+              <el-menu-item
+                @click="back(item.id)"
+                v-for="(item, index) in createdPlayList"
+                :key="item.id"
+                :index="'/musiclist/' + item.id"
+              >
+                <i class="el-icon-video-play"></i>
+                <span slot="title">{{ item.name }}</span>
+              </el-menu-item>
+            </el-submenu>
+          </el-menu>
+          <el-menu
+            v-if="show"
+            :unique-opened="true"
+            :collapse-transition="false"
+            active-text-color="red"
+          >
+            <el-submenu :index="''">
+              <template slot="title">
+                <span class="title-aside">收藏的歌单</span>
+              </template>
+              <el-menu-item
+                @click="back(item.id)"
+                v-for="(item, index) in sublistPlaylist"
+                :key="item.id"
+                :index="'/musiclist/' + item.id"
+              >
+                <i class="el-icon-video-play"></i>
+                <span slot="title">{{ item.name }}</span>
+              </el-menu-item>
+            </el-submenu>
+          </el-menu>
         </el-aside>
         <el-main>
           <keep-alive
@@ -19,6 +61,7 @@
             gender,Follow,Followed,a"
           >
             <router-view
+              :key="$route.fullPath"
               :is-show-play="isShowPlay"
               @play="audioPlay"
               @pause="audioPause"
@@ -54,8 +97,11 @@ import Logout from "./components/logout/Logout.vue";
 import MyMusic from "./components/myMusic/MyMusic.vue";
 import Massage from "./views/message/Massge.vue";
 import Notice from "./views/notice/Notice.vue";
-import { loginStatus, getProfileDetail } from "./network/getProfileData";
-
+import {
+  loginStatus,
+  getProfileDetail,
+  getUserPlayList,
+} from "./network/getProfileData";
 export default {
   name: "App",
   data() {
@@ -73,11 +119,16 @@ export default {
         "我的收藏",
       ], //侧边栏标题
       path: ["/local", "/recent", "/cloud", "/client", "/collect"], //侧边栏前往地址
+      createdPlayList: [1, 2, 3], //用户创建的歌单
+      sublistPlaylist: [], //用户收藏的歌单
     };
   },
   computed: {
     musicUrl() {
       return this.$store.state.musicUrl;
+    },
+    show() {
+      return window.localStorage.getItem("userId");
     },
   },
   created() {
@@ -87,12 +138,12 @@ export default {
         getProfileDetail(window.localStorage.getItem("userId"))
           .then((res) => {
             this.$store.commit("setUserInfo", res.data);
-
             this.$bus.$emit("getHeadUrl", res.data.profile.avatarUrl);
           })
           .catch((err) => {
             console.log(err);
           });
+        this.getUserPlayList();
       })
       .catch((err) => {
         window.localStorage.clear();
@@ -107,7 +158,7 @@ export default {
     Massage,
     Notice,
   },
-
+  filters: {},
   methods: {
     // 发送auido当前时间
     timeUpdate(time) {
@@ -131,9 +182,26 @@ export default {
     play() {
       this.isShowPlay = false;
     },
-    // closeLogout() {
-    //   this.$store.commit("setShowLogout", false);
-    // },
+    getUserPlayList() {
+      getUserPlayList(window.localStorage.getItem("userId"))
+        .then((res) => {
+          console.log(res);
+          this.createdPlayList = res.data.playlist.filter((item) => {
+            return item.subscribed == false;
+          });
+          res.data.playlist.forEach((item) => {
+            if (!this.createdPlayList.includes(item)) {
+              this.sublistPlaylist.push(item);
+            }
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    back(id) {
+      this.$router.push("/musiclist/" + id);
+    },
   },
 };
 </script>
@@ -159,6 +227,7 @@ export default {
 .el-aside {
   height: 100%;
   border-right: 1px solid #afafaf;
+  padding-bottom: 80px;
 }
 .el-main {
   margin-bottom: 100px;
@@ -180,5 +249,9 @@ export default {
   /* transform: translateX(-50%); */
   margin-left: 50%;
   z-index: 100;
+}
+.title-aside {
+  color: rgb(124, 124, 124);
+  font-size: 13px;
 }
 </style>

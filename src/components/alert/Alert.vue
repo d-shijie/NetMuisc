@@ -68,7 +68,6 @@ export default {
   methods: {
     itemClick(index, item) {
       this.$store.commit("setShowAlert", false);
-      console.log(item);
       // 播放按钮
       if (item === "播放(enter)") {
         getMusicUrl(this.songId)
@@ -88,6 +87,7 @@ export default {
     // 删除云盘歌曲
     deleteCloudMusic(item) {
       this.$store.commit("setShowAlert", false);
+
       if (item === "删除") {
         let query = {};
         query.id = this.songId;

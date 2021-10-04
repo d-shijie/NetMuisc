@@ -1,6 +1,12 @@
 <template>
   <div class="music-list">
-    <el-table @row-click="rowClick" size="mini" :data="songs">
+    <alert :x="x" :y="y" ref="alert" class="alert" :songId="songId"></alert>
+    <el-table
+      @row-contextmenu="rightClick"
+      @row-click="rowClick"
+      size="mini"
+      :data="songs"
+    >
       <el-table-column type="index"></el-table-column>
       <el-table-column>
         <template slot-scope="scope">
@@ -22,10 +28,12 @@
 <script>
 import Like from "../like/Like";
 import { likeMusic } from "../../network/getProfileData";
+import Alert from "../alert/Alert.vue";
 export default {
   name: "AlbumMusicList",
   components: {
     Like,
+    Alert,
   },
   props: {
     songs: {
@@ -34,6 +42,14 @@ export default {
         return [];
       },
     },
+  },
+  data() {
+    return {
+      songs: [],
+      x: "",
+      y: "",
+      songId: 0,
+    };
   },
   methods: {
     rowClick(row) {
@@ -51,15 +67,15 @@ export default {
           console.log(err);
         });
     },
-    // likeMusic(id) {
-    //   likeMusic(id, true)
-    //     .then((res) => {
-    //       console.log(res);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
+    // 鼠标右键点击 让alert出现在标准位置需双击
+    rightClick(row, colum, event) {
+      event.preventDefault();
+      this.x = event.pageX + "px";
+      this.y = event.pageY - 30 + "px";
+      this.songId = row.id;
+      this.$store.commit("setShowAlert", true);
+      this.$refs.alert.setLocation();
+    },
   },
 };
 </script>
