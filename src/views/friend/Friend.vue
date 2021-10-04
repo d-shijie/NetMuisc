@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="right">
-      <div v-if="!$store.state.showFriend" class="no-login">
+      <div v-if="$store.state.showFriend" class="no-login">
         <img src="../../assets/img/login/网易.jpg" alt="" />
         <el-button @click="login" round type="danger">立即登录</el-button>
       </div>
