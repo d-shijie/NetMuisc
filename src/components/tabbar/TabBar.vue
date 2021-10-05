@@ -44,28 +44,6 @@ export default {
   methods: {
     itemClick(index) {
       this.$router.push(this.paths[index]);
-      // if (this.$route.path.indexOf(this.paths) === -1) {
-      //   this.currentIndex = index;
-      // } else {
-      //   this.currentIndex = "";
-      // }
-      // switch (index) {
-      //   case 0:
-      //     this.$router.push("/findMusic");
-      //     break;
-      //   case 1:
-      //     this.$router.push("/video");
-      //     break;
-      //   case 2:
-      //     this.$router.push("/friend");
-      //     break;
-      //   case 3:
-      //     this.$router.push("/living");
-      //     break;
-      //   case 4:
-      //     this.$router.push("/personalFM");
-      //     break;
-      // }
     },
   },
 };

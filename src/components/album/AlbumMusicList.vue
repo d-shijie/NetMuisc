@@ -28,6 +28,7 @@
 <script>
 import Like from "../like/Like";
 import { likeMusic } from "../../network/getProfileData";
+import { getMusicDetail } from "../../network/getMusicListData";
 import Alert from "../alert/Alert.vue";
 export default {
   name: "AlbumMusicList",
@@ -53,7 +54,25 @@ export default {
   },
   methods: {
     rowClick(row) {
-      console.log(row);
+      this.$store.commit("setPlaylist", this.songs);
+      getMusicDetail(row.id)
+        .then((res) => {
+          let payload = {};
+          payload.imgUrl = res.data.songs[0].al.picUrl;
+          payload.id = res.data.songs[0].id;
+          payload.name = res.data.songs[0].name;
+          payload.artist = res.data.songs[0].ar[0].name;
+          payload.dt = res.data.songs[0].dt;
+          this.$store.commit("setMusicInfo", payload);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      clearInterval(this.$store.state.timer);
+      this.$store.state.beginTime = 0;
+      this.$store.state.timer = setInterval(() => {
+        this.$store.state.beginTime = this.$store.state.beginTime + 1000;
+      }, 1000);
       this.$http
         .get("/song/url", { params: { id: row.id } })
         .then((res) => {

@@ -72,3 +72,12 @@ export function subMusicList(query) {
         // }
     })
 }
+// 歌曲详情
+export function getMusicDetail(ids) {
+    return request({
+        url: '/song/detail',
+        params: {
+            ids
+        }
+    })
+}

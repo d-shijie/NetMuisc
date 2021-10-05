@@ -58,7 +58,7 @@
         <el-main>
           <keep-alive
             exclude="Search,Singer,Album,MV,MusicList,Profile,Dj,DjCategory,DailyReommend,VideoPlay,AllMV,TopicDetail,
-            gender,Follow,Followed,a"
+            gender,Follow,Followed,a,PersonalFM"
           >
             <router-view
               :key="$route.fullPath"
@@ -83,9 +83,13 @@
         class="audio"
         autoplay
         controls
-        loop
       ></audio>
     </div>
+    <music-player
+      ref="musicPlayer"
+      @pause="audioPause"
+      @play="audioPlay"
+    ></music-player>
   </div>
 </template>
 
@@ -97,6 +101,8 @@ import Logout from "./components/logout/Logout.vue";
 import MyMusic from "./components/myMusic/MyMusic.vue";
 import Massage from "./views/message/Massge.vue";
 import Notice from "./views/notice/Notice.vue";
+import MusicPlayer from "./components/musicPlayer/MusicPlayer.vue";
+import { getMusicDetail, getMusicUrl } from "./network/getMusicListData";
 import {
   loginStatus,
   getProfileDetail,
@@ -121,6 +127,7 @@ export default {
       path: ["/local", "/recent", "/cloud", "/client", "/collect"], //侧边栏前往地址
       createdPlayList: [1, 2, 3], //用户创建的歌单
       sublistPlaylist: [], //用户收藏的歌单
+      time: 0,
     };
   },
   computed: {
@@ -157,20 +164,70 @@ export default {
     MyMusic,
     Massage,
     Notice,
+    MusicPlayer,
   },
   filters: {},
   methods: {
     // 发送auido当前时间
     timeUpdate(time) {
       this.$bus.$emit("timeUpdate", this.$refs.audio.currentTime);
+      let endTime = (this.$store.state.musicInfo.dt / 1000).toFixed(0);
+
+      if (this.$refs.audio.currentTime.toFixed(0) === endTime) {
+        console.log(1);
+        let ids = [];
+        this.$store.state.playlist.forEach((item) => {
+          if (item.song) {
+            ids.push(item.song.id);
+          } else {
+            ids.push(item.id);
+          }
+        });
+        let index = ids.findIndex((item) => {
+          return item === this.$store.state.musicId;
+        });
+        index += 1;
+        this.$store.commit("setMusicId", ids[index]);
+        getMusicDetail(ids[index])
+          .then((res) => {
+            let payload = {};
+            payload.imgUrl = res.data.songs[0].al.picUrl;
+            payload.id = res.data.songs[0].id;
+            payload.name = res.data.songs[0].name;
+            payload.artist = res.data.songs[0].ar[0].name;
+            payload.dt = res.data.songs[0].dt;
+            this.$store.commit("setMusicInfo", payload);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        clearInterval(this.$store.state.timer);
+        this.$store.state.beginTime = 0;
+        this.$store.state.timer = setInterval(() => {
+          this.$store.state.beginTime = this.$store.state.beginTime + 1000;
+        }, 1000);
+        getMusicUrl(ids[index])
+          .then((res) => {
+            this.$store.commit("setMusicUrl", res.data.data[0].url);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
-    // 暂定auido
+    // 暂停auido
     audioPause() {
       this.$refs.audio.pause();
+      clearInterval(this.$store.state.timer);
+      this.time = this.$store.state.beginTime;
     },
     // 播放audio
     audioPlay() {
       this.$refs.audio.play();
+      this.$store.state.beginTime = this.time;
+      this.$store.state.timer = setInterval(() => {
+        this.$store.state.beginTime = this.$store.state.beginTime + 1000;
+      }, 1000);
     },
     //
     getKeywords(keywords) {
@@ -178,14 +235,15 @@ export default {
     },
     pause() {
       this.isShowPlay = true;
+      this.$store.commit("setIsPlay", false);
     },
     play() {
       this.isShowPlay = false;
+      this.$store.commit("setIsPlay", true);
     },
     getUserPlayList() {
       getUserPlayList(window.localStorage.getItem("userId"))
         .then((res) => {
-          console.log(res);
           this.createdPlayList = res.data.playlist.filter((item) => {
             return item.subscribed == false;
           });

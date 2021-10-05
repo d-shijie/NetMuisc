@@ -114,7 +114,7 @@ export default {
     getMusicListDetail() {
       getMusicListDetail(this.$route.params.id)
         .then((res) => {
-          console.log(res);
+         
           const result = res.data.playlist;
           this.musicListDetail.imgUrl = result.coverImgUrl;
           this.musicListDetail.commentCount = result.commentCount;
